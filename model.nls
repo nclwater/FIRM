@@ -845,34 +845,34 @@ to colour-patch
 			ifelse vehicle-count = 0 [
 				set pcolor [170 170 170]
 			] [
-let avg total-speed / vehicle-count
-if avg > 4 [
-	inspect self
-	abort (word "average speed too high (" total-speed "/" vehicle-count ")")
-]
-				set pcolor scale-color red (total-speed / vehicle-count) 0 8
-				;;set pcolor black	;; (scale-color green vehicle-count 2 0)
-			]
-		]
-	] [ifelse (kind = Sea) [
-		set pcolor [55 0 225]
-	] [ifelse (known-depth > 0) [
-		set pcolor [97 248 255]		;; [40 163 255]
-	] [ifelse (level < height) [
-		set pcolor white
-	] [ifelse (kind = Land) [
-		ifelse nonresidential > 0 or residential > 0 [
-			ifelse residential > nonresidential [
-				set pcolor yellow
-			] [
-				set pcolor lime
-			]
-		] [
-			set pcolor (scale-color brown height maxh minh)
-		]
-	][
-		set pcolor (yellow - 1)
-	]]]]]]
+    let avg total-speed / vehicle-count
+    if avg > 4 [
+        inspect self
+        abort (word "average speed too high (" total-speed "/" vehicle-count ")")
+    ]
+                    set pcolor scale-color red (total-speed / vehicle-count) 0 8
+                    ;;set pcolor black	;; (scale-color green vehicle-count 2 0)
+                ]
+            ]
+        ] [ifelse (kind = Sea) [
+            set pcolor [55 0 225]
+        ] [ifelse (known-depth > 0) [
+            set pcolor [97 248 255]		;; [40 163 255]
+        ] [ifelse (level < height) [
+            set pcolor white
+        ] [ifelse (kind = Land) [
+            ifelse nonresidential > 0 or residential > 0 [
+                ifelse residential > nonresidential [
+                    set pcolor yellow
+                ] [
+                    set pcolor lime
+                ]
+            ] [
+                set pcolor (scale-color brown height maxh minh)
+            ]
+        ][
+            set pcolor (yellow - 1)
+        ]]]]]]
 end
 
 ;; hydro model informs us that a given cell is wet.
@@ -994,7 +994,7 @@ to setup
 	let nd no-defences
 	let nr no-roads
 	let ets end-time-str
-
+    print(world-width)
 	clear-all
 	file-close-all
 	set no-buildings nb
