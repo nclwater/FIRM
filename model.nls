@@ -698,100 +698,100 @@ to read-buildings
 		set i (i + 1)
 	]
 
-let progress 0
-	while [not file-at-end?] [
-set progress progress + 1
-if progress mod 1000 < 0.5 [
-print (word "-- progress " progress)
-]
+    let progress 0
+        while [not file-at-end?] [
+    set progress progress + 1
+    if progress mod 1000 < 0.5 [
+    print (word "-- progress " progress)
+    ]
 
-		let z file-read
-		let len length z
-		if (len >= 3) [
-			let x (map2patchx (item 0 z))
-			let y (map2patchy (item 1 z))
-			let k (item 2 z)
-			
-			let p patch x y
-			;; preprocessed file includes nearest node id
-			if p != nobody or k >= 1000 [
-				let n nobody
-				ifelse len >= 4 [
-					set n table:get node-table (item 3 z)
-				] [
-					set n nearest-node x y
-					set z lput ([node-oid] of n) z
-				]
-				if preprocessing? [
-					file-open pfilename
-					file-write z
-					file-print ""
-					file-open filename
-				]
-				let bclasses array2:item building-classes (table:get building-class-index k)
-				foreach bclasses [
-					let bi ?
-					let bnodes (array2:item class-nodes bi)
-					let counts (array2:item class-counts bi)
-					;; search from end will be faster if building codes have reasonable geographical locality.
-					let j array-last-position n bnodes
-					ifelse is-number? j [
-						array2:set counts j ((array2:item counts j) + 1)
-					] [
-						let clen (array2:length counts)
-						array2:set counts clen 1
-						array2:set bnodes clen n
-					]
-					array2:set class-totals bi (array2:item class-totals bi) + 1
-				]
-				if p != nobody [
-					ask  p [
-						if (kind = Land) [
-							ifelse (k = 0) [
-								set residential residential + 1
-							] [
-								set nonresidential nonresidential + 1
-							]
-						]
-					]
-				]
-			]
-		]
-	]
-	file-close-all
-if preprocessing? [
-	let xxx 0
-	foreach array2:to-list building-class-name [
-		let t (array2:item class-totals xxx)
-		if t > 0.5 [
-			print (word "-- " ? ": " t)
-		]
-		set xxx xxx + 1
-	]
-]
+            let z file-read
+            let len length z
+            if (len >= 3) [
+                let x (map2patchx (item 0 z))
+                let y (map2patchy (item 1 z))
+                let k (item 2 z)
 
-	set building-class-cfreq (array2:new max-bclass [])
-	let bi 0
-	while [bi < max-bclass] [
-		let counts (array2:item class-counts bi)
-		let n array2:length counts
-		if n > 0 [
-			let cfreq array2:new n 0
-			let tot array2:item class-totals bi
-			let ctot 0
-			let j 0
-			while [j < n] [
-				set ctot ctot + (array2:item counts j) / tot
-				array2:set cfreq j ctot
-				set j (j + 1)
-			]
-			array2:set cfreq (n - 1) 1
-			array2:set building-class-cfreq bi cfreq
-		]
-		set bi (bi + 1)
-	]
-	set building-class-nodes class-nodes
-	set building-class-totals class-totals
+                let p patch x y
+                ;; preprocessed file includes nearest node id
+                if p != nobody or k >= 1000 [
+                    let n nobody
+                    ifelse len >= 4 [
+                        set n table:get node-table (item 3 z)
+                    ] [
+                        set n nearest-node x y
+                        set z lput ([node-oid] of n) z
+                    ]
+                    if preprocessing? [
+                        file-open pfilename
+                        file-write z
+                        file-print ""
+                        file-open filename
+                    ]
+                    let bclasses array2:item building-classes (table:get building-class-index k)
+                    foreach bclasses [
+                        let bi ?
+                        let bnodes (array2:item class-nodes bi)
+                        let counts (array2:item class-counts bi)
+                        ;; search from end will be faster if building codes have reasonable geographical locality.
+                        let j array-last-position n bnodes
+                        ifelse is-number? j [
+                            array2:set counts j ((array2:item counts j) + 1)
+                        ] [
+                            let clen (array2:length counts)
+                            array2:set counts clen 1
+                            array2:set bnodes clen n
+                        ]
+                        array2:set class-totals bi (array2:item class-totals bi) + 1
+                    ]
+                    if p != nobody [
+                        ask  p [
+                            if (kind = Land) [
+                                ifelse (k = 0) [
+                                    set residential residential + 1
+                                ] [
+                                    set nonresidential nonresidential + 1
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
+        file-close-all
+    if preprocessing? [
+        let xxx 0
+        foreach array2:to-list building-class-name [
+            let t (array2:item class-totals xxx)
+            if t > 0.5 [
+                print (word "-- " ? ": " t)
+            ]
+            set xxx xxx + 1
+        ]
+    ]
+
+        set building-class-cfreq (array2:new max-bclass [])
+        let bi 0
+        while [bi < max-bclass] [
+            let counts (array2:item class-counts bi)
+            let n array2:length counts
+            if n > 0 [
+                let cfreq array2:new n 0
+                let tot array2:item class-totals bi
+                let ctot 0
+                let j 0
+                while [j < n] [
+                    set ctot ctot + (array2:item counts j) / tot
+                    array2:set cfreq j ctot
+                    set j (j + 1)
+                ]
+                array2:set cfreq (n - 1) 1
+                array2:set building-class-cfreq bi cfreq
+            ]
+            set bi (bi + 1)
+        ]
+        set building-class-nodes class-nodes
+        set building-class-totals class-totals
 end
 
 to-report building-patches [class]
