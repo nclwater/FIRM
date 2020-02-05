@@ -505,8 +505,6 @@ to read-map
 	let nullheight -9999
 
 	let filename (word scenario "/terrain.txt")
-	print(world-width)
-	print(world-height)
 	print (word "-- reading " filename)
 	file-open filename
 
@@ -994,7 +992,6 @@ to setup
 	let nd no-defences
 	let nr no-roads
 	let ets end-time-str
-    print(world-width)
 	clear-all
 	file-close-all
 	set no-buildings nb
