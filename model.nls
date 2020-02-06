@@ -858,12 +858,12 @@ to colour-patch
                     [ifelse (level < height) ;; check if water is above ground
                         [set pcolor white]
                         [ifelse (kind = Land) ;; check if cell is land
-                            [ifelse nonresidential > 0 or residential > 0 ;; check if land is residential
-                                [ifelse residential > nonresidential
-                                [set pcolor yellow]
-                                [set pcolor lime]
+                            [ifelse nonresidential > 0 or residential > 0 ;; check if any properties exist
+                                [ifelse residential > nonresidential ;; check if land is residential
+                                    [set pcolor yellow]
+                                    [set pcolor lime]
                                 ]
-                                [set pcolor (scale-color brown height maxh minh)]
+                                [set pcolor (scale-color brown height maxh minh)] ;; max must be different to min
                             ]
                             [set pcolor (yellow - 1)]
                         ]
@@ -871,6 +871,7 @@ to colour-patch
                 ]
             ]
         ]
+        print(word "end")
 end
 
 ;; hydro model informs us that a given cell is wet.
