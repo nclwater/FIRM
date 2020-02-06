@@ -160,7 +160,7 @@ def timeline(defence, warningtime, sl):
             ],
             [
                 "0s",
-                1000,
+                10, # number of vehicles
                 ["vehicle", "kids & work"]
             ],
             [
