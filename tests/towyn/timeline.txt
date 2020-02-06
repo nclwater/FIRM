@@ -1,0 +1,20 @@
+;;[[5000 "normal" "08:50" "5m"] "vehicle" "transit-eastbound"]
+;;[1 "explicit" ["07:45" 05] [
+;;[200 ["normal" "07:50" "1m"] "test"]
+;;["07:46" ["sealevel" 6]]
+;;["07:50" ["breach" "b"]]
+;;["07:50" ["breach" "c"]]
+;;["07:51" ["breach" "d"]]
+;;"0s" "vehicle" "transit eastbound" 1]
+;;["0s" "vehicle" "transit westbound" 1]
+[
+[["normal" "07:50" "5m"] 300
+	["vehicle" "transit eastbound"] 0.8
+	["vehicle" "transit westbound"] 0.2]
+["0s" 1000 ["vehicle" "kids & work"]]
+;;["0s" 1 ["vehicle" "test"]]
+;;["07:46" ["sealevel" 6]]
+["07:50" ["breach" "b"]]
+["07:51" ["breach" "c"]]
+["07:52" ["breach" "d"]]
+]
