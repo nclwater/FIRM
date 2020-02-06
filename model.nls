@@ -831,46 +831,46 @@ to-report nearest-node [x y]
 	report min-one-of nodes [
 		(node-x - x) ^ 2 + (node-y - y) ^ 2
 	]
-end		
+end
 
 to colour-patch
-	ifelse (height > undefended-height) [
-		set pcolor magenta
-	] [ifelse (count crossing > 0) [
-		ifelse known-depth > 0 [
-			set pcolor [55 0 225]
-		] [
-			ifelse vehicle-count = 0 [
-				set pcolor [170 170 170]
-			] [
-    let avg total-speed / vehicle-count
-    if avg > 4 [
-        inspect self
-        abort (word "average speed too high (" total-speed "/" vehicle-count ")")
-    ]
+	ifelse (height > undefended-height)
+	    [set pcolor magenta]
+	    [ifelse (count crossing > 0)
+	        [ifelse known-depth > 0
+	            [set pcolor [55 0 225]]
+	            [ifelse vehicle-count = 0
+	                [set pcolor [170 170 170]]
+	                [
+	                let avg total-speed / vehicle-count
+                    if avg > 4 [
+                        inspect self
+                        abort (word "average speed too high (" total-speed "/" vehicle-count ")")
+                    ]
                     set pcolor scale-color red (total-speed / vehicle-count) 0 8
-                    ;;set pcolor black	;; (scale-color green vehicle-count 2 0)
+                    ]
                 ]
             ]
-        ] [ifelse (kind = Sea) [
-            set pcolor [55 0 225]
-        ] [ifelse (known-depth > 0) [
-            set pcolor [97 248 255]		;; [40 163 255]
-        ] [ifelse (level < height) [
-            set pcolor white
-        ] [ifelse (kind = Land) [
-            ifelse nonresidential > 0 or residential > 0 [
-                ifelse residential > nonresidential [
-                    set pcolor yellow
-                ] [
-                    set pcolor lime
+            [ifelse (kind = Sea)
+                [set pcolor [55 0 225]]
+                [ifelse (known-depth > 0)
+                    [set pcolor [97 248 255]]
+                    [ifelse (level < height)
+                        [set pcolor white]
+                        [ifelse (kind = Land)
+                            [ifelse nonresidential > 0 or residential > 0
+                                [ifelse residential > nonresidential
+                                [set pcolor yellow]
+                                [set pcolor lime]
+                                ]
+                                [set pcolor (scale-color brown height maxh minh)]
+                            ]
+                            [set pcolor (yellow - 1)]
+                        ]
+                    ]
                 ]
-            ] [
-                set pcolor (scale-color brown height maxh minh)
             ]
-        ][
-            set pcolor (yellow - 1)
-        ]]]]]]
+        ]
 end
 
 ;; hydro model informs us that a given cell is wet.
