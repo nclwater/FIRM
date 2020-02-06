@@ -55,9 +55,9 @@ GRAPHICS-WINDOW
 0
 1
 0
-{width}
+100
 0
-{height}
+100
 0
 0
 1

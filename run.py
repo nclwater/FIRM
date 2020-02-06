@@ -66,7 +66,9 @@ class Run:
             ('heuristic-factor', '1.25'),
             ('log-interval', '&quot;2m&quot;'),
             ('end-time-str', '&quot;8:20&quot;'),
-            ('random-seed', str(seed_count))
+            ('random-seed', str(seed_count)),
+            ('world-width', str(self.width)),
+            ('world-height', str(self.height))
 
         ]:
             element = SubElement(experiment, 'enumeratedValueSet', {'variable': variable})
@@ -76,15 +78,7 @@ class Run:
         with open(self.setup_file, 'w') as f:
             f.write(unescape(dom.toprettyxml()))
 
-    def create_nlogo_file(self):
-        with open('template.txt') as f:
-            template = f.read()
-
-        with open(self.nlogo_file, 'w') as f:
-            f.write(template.format(width=self.width, height=self.height))
-
     def run(self):
-        self.create_nlogo_file()
         args = ['java',
                 '-Xmx1024M',
                 '-cp',
