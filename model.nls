@@ -1056,19 +1056,27 @@ to perform-action [actions]
 	]
 ;; print (word (time-string ticks) ": " action)
 	let verb item 0 action
-	ifelse verb = "breach" [
-		let d item 1 action
-		set-defence-height d 0
-		print (word "-- defence " d " breached")
-	] [ifelse verb = "sealevel" [
-		set sealevel item 1 action
-		print (word "-- sealevel " sealevel)
-	] [ifelse verb = "vehicle" [
-		make-vehicle item 1 action
-	] [if verb = "evacuate" [
-		print "-- evacuate!"
-		set evacuate? true
-	]]]]
+	ifelse verb = "breach"
+	    [
+            let d item 1 action
+            set-defence-height d 0
+            print (word "-- defence " d " breached")
+	    ]
+        [ifelse verb = "sealevel"
+            [
+            set sealevel item 1 action
+            print (word "-- sealevel " sealevel)
+            ]
+            [ifelse verb = "vehicle"
+                [make-vehicle item 1 action]
+                [if verb = "evacuate"
+                [
+                    print "-- evacuate!"
+                    set evacuate? true
+                ]
+                ]
+            ]
+        ]
 end
 
 ;; report some likely number of events that
@@ -1096,7 +1104,8 @@ to-report event-count [m dfn delta t]
 end
 
 to model-step
-	while [timeline != [] and first first timeline <= ticks] [
+	while [timeline != [] and first first timeline <= ticks]
+	[
 		let a first timeline
 		let m item 1 a
 		let actions item 2 a
@@ -1105,7 +1114,9 @@ to model-step
 		]
 		set timeline but-first timeline
 	]
-	foreach sporadic [
+
+	foreach sporadic
+	[
 		let dfn item 0 ?
 		let m item 1 ?
 		let actions item 2 ?
@@ -1114,10 +1125,13 @@ to model-step
 			perform-action actions
 		]
 	]
-	if evacuate? [
+
+	if evacuate?
+	[
 		ask vehicles with [not ve-evacuate?] [set ve-evacuate? true]
 		set evacuate? false
 	]
+
 	ask vehicles [vehicle-step]
 	let t ticks
 	tick-advance vehicle-timestep
@@ -1127,7 +1141,7 @@ to model-step
 	if logging? and int (ticks / log-interval-t) != int (last-log / log-interval-t) [
 		stats-log
 	]
-  setup-plots
+    setup-plots
 end
 
 ;; Plot the number of vehicles drowned etc.
