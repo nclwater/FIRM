@@ -17,7 +17,16 @@ netlogo = os.environ['netlogo']
 
 
 class Run:
-    def __init__(self, in_dir, width, height, vehicles, defences, warning_time, sea_level):
+    def __init__(self,
+                 in_dir,
+                 width,
+                 height,
+                 vehicles,
+                 defences,
+                 warning_time,
+                 sea_level,
+                 start_time,
+                 end_time):
         self.in_dir = in_dir
         self.out_dir = os.path.join(in_dir, 'out')
         if not os.path.exists(self.out_dir):
@@ -30,6 +39,8 @@ class Run:
         self.sea_level = sea_level
         self.width = width
         self.height = height
+        self.start_time = start_time
+        self.end_time = end_time
 
     def write_data_file(self, filename, seq):
         with open(self.out_dir + "/" + filename, "w") as f:
@@ -60,12 +71,15 @@ class Run:
         metric = SubElement(experiment, 'metric')
         metric.text = '(list end-time vehicles-drowned vehicles-diverted vehicles-isolated)'
 
+        def quote(string):
+            return "&quot;{}&quot;".format(string)
+
         for variable, value in [
-            ('start-time', r"&quot;7:45&quot;"),
-            ('Scenario', "&quot;{}&quot;".format(self.in_dir)),
+            ('start-time', quote(self.start_time)),
+            ('Scenario', quote(str(self.in_dir))),
             ('heuristic-factor', '1.25'),
-            ('log-interval', '&quot;2m&quot;'),
-            ('end-time-str', '&quot;8:20&quot;'),
+            ('log-interval', quote('2m')),
+            ('end-time-str', quote(self.end_time)),
             ('random-seed', str(seed_count)),
             ('world-width', str(self.width)),
             ('world-height', str(self.height))

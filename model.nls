@@ -871,7 +871,6 @@ to colour-patch
                 ]
             ]
         ]
-        print(word "end")
 end
 
 ;; hydro model informs us that a given cell is wet.
