@@ -834,12 +834,12 @@ to-report nearest-node [x y]
 end
 
 to colour-patch
-	ifelse (height > undefended-height)
+	ifelse (height > undefended-height) ;; check if flooded
 	    [set pcolor magenta]
-	    [ifelse (count crossing > 0)
-	        [ifelse known-depth > 0
+	    [ifelse (count crossing > 0) ;; check if anyone is crossing
+	        [ifelse known-depth > 0 ;; check if water is present
 	            [set pcolor [55 0 225]]
-	            [ifelse vehicle-count = 0
+	            [ifelse vehicle-count = 0 ;; check if any vehicles are present
 	                [set pcolor [170 170 170]]
 	                [
 	                let avg total-speed / vehicle-count
@@ -851,14 +851,14 @@ to colour-patch
                     ]
                 ]
             ]
-            [ifelse (kind = Sea)
+            [ifelse (kind = Sea) ;; check if cell is sea
                 [set pcolor [55 0 225]]
-                [ifelse (known-depth > 0)
+                [ifelse (known-depth > 0) ;; check if water is present
                     [set pcolor [97 248 255]]
-                    [ifelse (level < height)
+                    [ifelse (level < height) ;; check if water is above ground
                         [set pcolor white]
-                        [ifelse (kind = Land)
-                            [ifelse nonresidential > 0 or residential > 0
+                        [ifelse (kind = Land) ;; check if cell is land
+                            [ifelse nonresidential > 0 or residential > 0 ;; check if land is residential
                                 [ifelse residential > nonresidential
                                 [set pcolor yellow]
                                 [set pcolor lime]
