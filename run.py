@@ -13,7 +13,7 @@ from xml.dom import minidom
 from xml.sax.saxutils import unescape
 
 
-netlogo = os.environ['netlogo']
+netlogo = os.environ['NETLOGO']
 
 
 class Run:
