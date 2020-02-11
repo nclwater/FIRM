@@ -55,9 +55,9 @@ GRAPHICS-WINDOW
 0
 1
 0
-100
+248
 0
-100
+178
 0
 0
 1
@@ -109,7 +109,7 @@ INPUTBOX
 125
 70
 scenario
-towyn
+tests/towyn
 1
 0
 String
@@ -709,7 +709,7 @@ NetLogo 4.0.2
       <value value="&quot;7:45&quot;"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="scenario">
-      <value value="&quot;tst&quot;"/>
+      <value value="&quot;tests/towyn&quot;"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="heuristic-factor">
       <value value="1.25"/>
