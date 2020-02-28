@@ -26,6 +26,7 @@ https://www.youtube.com/watch?v=o0EOlc5n9O8
 Set environment variable NETLOGO with the location of NetLogo.jar. Then:
 ```
 python tests/test_towyn.py
+python tests/test_kibera.py
 ```
 ## Acknowledgements
 This model was originally developed at Newcastle University by Roger Peppe and Richard Dawson. The research was funded by the Environment Agency (Reliability in Flood Incident Management Planning – SC060063) as part of the Joint DEFRA/EA Flood and Coastal Erosion Risk Management R&D Programme. The overall programme was led by Halcrow but also in collaboration with JBA Consulting, Middlesex University and Bristol University.
