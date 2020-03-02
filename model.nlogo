@@ -130,7 +130,7 @@ MONITOR
 167
 170
 212
-drowned
+Total in Danger
 agents-drowned\n
 17
 1
@@ -175,7 +175,7 @@ INPUTBOX
 230
 70
 start-time
-7:45
+06:04
 1
 0
 String
@@ -334,9 +334,11 @@ agents drowned
 0.0
 10.0
 true
-false
+true
 PENS
-"default" 1.0 0 -16777216 true
+"Total" 1.0 0 -16777216 true
+"Adults" 1.0 0 -5825686 true
+"Children" 1.0 0 -13345367 true
 
 PLOT
 6
@@ -366,6 +368,45 @@ Evacuees
 17
 1
 11
+
+MONITOR
+371
+377
+499
+422
+Adults at High Risk
+agents-drownedA
+17
+1
+11
+
+MONITOR
+372
+431
+498
+476
+Children at High Risk
+agents-drownedC
+17
+1
+11
+
+PLOT
+1014
+387
+1290
+538
+People Evacuated
+NIL
+NIL
+0.0
+10.0
+0.0
+10.0
+true
+false
+PENS
+"default" 1.0 0 -16777216 true
 
 @#$#@#$#@
 WHAT IS IT?
