@@ -370,7 +370,7 @@ end
 ;; from sporadic events (in sporadic).
 to read-timeline
   file-close-all
-  let filename (word scenario "/timeline.txt")
+  let filename (word scenario "/out/timeline.txt")
   print (word "-- reading " filename)
   file-open filename
   let b file-read
