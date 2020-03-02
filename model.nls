@@ -598,56 +598,56 @@ to read-streams
    file-close-all
 
    let filename(word scenario "/Streams.txt")
-   print (word "-- reading " filename)
-   file-open filename
 
+   if file-exists? filename [
+        print (word "-- reading " filename)
+        file-open filename
+        let z [1]
+        let nullheight -9999
+        ;; read header
+        while [not file-at-end? and (length z > 0)] [
+        set z file-read
+        if (length z = 2) [
+        let name (item 0 z)
+        let i (item 1 z)
+        ifelse (name = "ncols") [
+            set ncols i
+          ] [ifelse (name = "nrows") [
+            set nrows i
+          ] [ifelse (name = "xllcorner") [
+            set xllcorner i
+          ] [ifelse (name = "yllcorner") [
+            set yllcorner i
+          ] [ifelse (name = "NODATA_value") [
+            set nullheight i
+          ] [ifelse (name = "cellsize") [
+            set celldx i
+          ] [
+            print (word "-- unexpected value: " name)
+            ]]]]]]
+            ]
+        ]
+        if (world-width != ncols or world-height != nrows) [
+            abort (word "arena size must be " ncols "x" nrows)
+        ]
 
-  let z [1]
-  let nullheight -9999
-   ;; read header
-  while [not file-at-end? and (length z > 0)] [
-    set z file-read
-    if (length z = 2) [
-      let name (item 0 z)
-      let i (item 1 z)
-      ifelse (name = "ncols") [
-        set ncols i
-      ] [ifelse (name = "nrows") [
-        set nrows i
-      ] [ifelse (name = "xllcorner") [
-        set xllcorner i
-      ] [ifelse (name = "yllcorner") [
-        set yllcorner i
-      ] [ifelse (name = "NODATA_value") [
-        set nullheight i
-      ] [ifelse (name = "cellsize") [
-        set celldx i
-      ] [
-        print (word "-- unexpected value: " name)
-      ]]]]]]
-    ]
+        ;; read rows
+        let y max-pycor
+        while [not file-at-end?] [
+            set z file-read
+            let x min-pxcor
+            foreach z [
+                ask patch x y [
+                if (close? ? nullheight) [
+                    set kind Sea
+                ]]
+                set x (x + 1)
+                 ]
+                 set y (y - 1)
+                  ]
+        file-close
   ]
-  if (world-width != ncols or world-height != nrows) [
-    abort (word "arena size must be " ncols "x" nrows)
-  ]
-
-  ;; read rows
-  let y max-pycor
-  while [not file-at-end?] [
-    set z file-read
-    let x min-pxcor
-    foreach z [
-      ask patch x y [
-        if (close? ? nullheight) [
-          set kind Sea
-          ]]
-      set x (x + 1)
-    ]
-    set y (y - 1)
-  ]
-
-    file-close
- end
+end
 
 
 ;; read the building class table.
