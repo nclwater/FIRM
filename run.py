@@ -43,7 +43,7 @@ class Run:
                 f.write('\n')
             f.close()
 
-    def generate_setup(self, seed_count):
+    def generate_setup(self, seed):
 
         experiments = Element('experiments')
 
@@ -74,7 +74,7 @@ class Run:
             ('heuristic-factor', '1.25'),
             ('log-interval', quote('2m')),
             ('end-time-str', quote(self.end_time)),
-            ('random-seed', str(seed_count)),
+            ('random-seed', str(seed)),
             ('world-width', str(self.width)),
             ('world-height', str(self.height))
 
