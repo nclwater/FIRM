@@ -322,6 +322,25 @@ agents-unparking\n
 11
 
 PLOT
+531
+380
+966
+547
+Timeseries of Pedestrians at High Risk
+Time
+Vehicles drowned
+0.0
+10.0
+0.0
+10.0
+true
+true
+PENS
+"Total" 1.0 0 -16777216 true
+"Adults" 1.0 0 -5825686 true
+"Children" 1.0 0 -13345367 true
+
+PLOT
 6
 321
 234
