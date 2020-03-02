@@ -1038,7 +1038,7 @@ to setup
 	] [
 		set logging? true
 		set log-interval-t parse-time log-interval
-		file-open-trunc (word scenario "/stats.out")
+		file-open-trunc (word scenario "/out/stats.out")
 		file-print (word "start," ticks)
 		file-flush
 	]
