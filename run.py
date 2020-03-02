@@ -36,14 +36,14 @@ class Run:
         self.start_time = start_time
         self.end_time = end_time
 
-    def write_data_file(self, filename, seq):
+    def write_data_file(self, filename, sequence):
         with open(self.out_dir + "/" + filename, "w") as f:
-            for s in seq:
-                f.write(netlogo_repr(s))
+            for component in sequence:
+                f.write(netlogo_representation(component))
                 f.write('\n')
             f.close()
 
-    def generate_setup(self, seed):
+    def write_setup_file(self, seed):
 
         experiments = Element('experiments')
 
@@ -111,7 +111,7 @@ class Run:
         self.write_data_file('agents.txt', self.vehicles)
         for sc in seed:
             self.write_data_file('timeline.txt', timeline)
-            self.generate_setup(sc)
+            self.write_setup_file(sc)
             self.run()
             r = os.path.join(self.out_dir, name)
             shutil.rmtree(r, True)
@@ -120,9 +120,9 @@ class Run:
                 shutil.copy(f, r)
 
 
-def netlogo_repr(x):
+def netlogo_representation(x):
     if isinstance(x, list):
-        return '[' + ' '.join(map(netlogo_repr, x)) + ']'
+        return '[' + ' '.join(map(netlogo_representation, x)) + ']'
     elif isinstance(x, str):
         r = '"'
         for c in x:
