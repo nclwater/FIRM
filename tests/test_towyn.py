@@ -46,21 +46,48 @@ vehicles = [
         ["some evacuation point", "5m 1m", "towyn test", 1],
     ]]]
 
-defences = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "rhyl1", "rhyl2", "rhyl3"]
+defences = ["a", "b", "c"]
 
-warningtime = ["07:50:00", "07:51:00", "07:52:00", "07:53:00", "07:54:00", "07:55:00", "07:56:00", "07:57:00",
-               "07:58:00", "07:59:00", "08:00:00"]
+warning_times = ["07:50:00", "07:51:00", "07:52:00"]
 
-sealevel = [4, 4.2, 4.4, 4.6, 4.8, 5, 5.2, 5.4, 5.6, 5.8, 6, 6.2, 6.4, 6.6, 6.8, 7]
+sea_levels = [4, 5, 6]
 
+r = run.Run(in_dir='tests/towyn',
+            vehicles=vehicles,
+            width=249,
+            height=179,
+            start_time='7:45',
+            end_time='8:20')
 
-run.Run(in_dir='tests/towyn',
-        vehicles=vehicles,
-        defences=defences,
-        warning_time=warningtime,
-        sea_level=sealevel,
-        width=249,
-        height=179,
-        start_time='7:45',
-        end_time='8:20'
-        ).run_all_setups()
+for defence in defences:
+    for warning_time in warning_times:
+        for sea_level in sea_levels:
+            r.start(name='{}-{}-{}'.format(defence, warning_time.replace(':', '.'), sea_level), timeline=[
+                    [
+                        [
+                            ["normal", "08:00", "15m"],
+                            500,
+                            ["vehicle", "transit eastbound"],
+                            0.8,
+                            ["vehicle", "transit westbound"],
+                            0.2
+                        ],
+                        [
+                            "0s",
+                            10, # number of vehicles
+                            ["vehicle", "kids & work"]
+                        ],
+                        [
+                            "07:54",
+                            ["sealevel", sea_level]
+                        ],
+                        [
+                            "07:55",
+                            ["breach", defence]
+                        ],
+                        [
+                            warning_time,
+                            ["evacuate"]
+                        ]
+                    ]
+                ])

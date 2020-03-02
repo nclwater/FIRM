@@ -694,7 +694,7 @@ to-report compiled-states [spec start]
 end
 
 to read-vehicle-types
-	let filename (word scenario "/vehicles.txt")
+	let filename (word scenario "/out/vehicles.txt")
 	print (word "-- reading " filename)
 	file-open filename
 	

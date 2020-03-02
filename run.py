@@ -22,9 +22,6 @@ class Run:
                  width,
                  height,
                  vehicles,
-                 defences,
-                 warning_time,
-                 sea_level,
                  start_time,
                  end_time):
         self.in_dir = in_dir
@@ -34,9 +31,6 @@ class Run:
         self.nlogo_file = 'model.nlogo'
         self.setup_file = os.path.join(self.out_dir, 'setup.xml')
         self.vehicles = vehicles
-        self.defences = defences
-        self.warning_time = warning_time
-        self.sea_level = sea_level
         self.width = width
         self.height = height
         self.start_time = start_time
@@ -110,27 +104,20 @@ class Run:
         p.wait()
         print("done with %s" % str(p.returncode))
 
-    def run_all_setups(self, seed=None):
+    def start(self, name, timeline, seed=None):
         if seed is None:
             seed = [0]
 
         self.write_data_file('vehicles.txt', self.vehicles)
-
-        for d in self.defences:
-            for wt in self.warning_time:
-                for sc in seed:
-                    for sl in self.sea_level:
-                        print("Running for defence " + d.upper() + " failure, storm surge " + str(
-                            sl) + "m, evacuation time " + wt + " random seed " + str(sc))
-                        self.write_data_file('timeline.txt', timeline(d, wt, sl))
-                        self.generate_setup(sc)
-                        self.run()
-                        r = self.out_dir + '/result-breach-' + d + '-' + str(sl) + '-' + ''.join(
-                            wt.split(':')) + '-' + str(sc)
-                        shutil.rmtree(r, True)
-                        os.mkdir(r)
-                        for f in glob.glob(self.out_dir + "/*.out"):
-                            shutil.copy(f, r)
+        for sc in seed:
+            self.write_data_file('timeline.txt', timeline)
+            self.generate_setup(sc)
+            self.run()
+            r = os.path.join(self.out_dir, name)
+            shutil.rmtree(r, True)
+            os.mkdir(r)
+            for f in glob.glob(self.out_dir + "/*.out"):
+                shutil.copy(f, r)
 
 
 def netlogo_repr(x):
@@ -145,35 +132,3 @@ def netlogo_repr(x):
         return r + '"'
     else:
         return repr(x)
-
-
-def timeline(defence, warningtime, sl):
-    return [
-        [
-            [
-                ["normal", "08:00", "15m"],
-                500,
-                ["vehicle", "transit eastbound"],
-                0.8,
-                ["vehicle", "transit westbound"],
-                0.2
-            ],
-            [
-                "0s",
-                10, # number of vehicles
-                ["vehicle", "kids"]
-            ],
-            [
-                "07:54",
-                ["sealevel", sl]
-            ],
-            [
-                "07:55",
-                ["breach", defence]
-            ],
-            [
-                warningtime,
-                ["evacuate"]
-            ]
-        ]
-    ]
