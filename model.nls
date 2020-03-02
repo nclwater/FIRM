@@ -52,8 +52,8 @@ patches-own [
   level      ;; water level (metres above mean sea level)
   ;;Wlevel ;; Level of Sea Cells
   crossing    ;; rlinks crossing this patch (agentset).
-  vehicle-count  ;; number of vehicles on this patch.
-  total-speed  ;; total speed of vehicles on this patch (in vcells)
+  agent-count  ;; number of agents on this patch.
+  total-speed  ;; total speed of agents on this patch (in vcells)
   known-depth  ;; crossing links know that this patch has this level of water (metres above height)
   flood-time  ;; time cell first became wet, or false if still dry.
   buildings-flooded? ;; Whether the buildings have flooded or not (stops building counter double counting)
@@ -69,15 +69,15 @@ rlinks-own [
   rlink-reverse?    ;; which way we're travelling along phys. road
   rlink-d      ;; distance along link, in vcells.
   rlink-depth    ;; depth this link is flooded to.
-  rlink-stranded    ;; number of vehicles stranded here
+  rlink-stranded    ;; number of agents stranded here
   rlink-strandedA
   rlink-strandedC
-  rlink-vcells    ;; array of vehicle, when vcount > 0
-  rlink-vcount    ;; how many vehicles travelling on link.
+  rlink-vcells    ;; array of agent, when vcount > 0
+  rlink-vcount    ;; how many agents travelling on link.
 
   ;; link statistics
-  rlink-vehicle-total    ;; total number of vehicles entered this link
-  rlink-velocity-total    ;; totalled velocity of vehicles on this link over all steps
+  rlink-agent-total    ;; total number of agents entered this link
+  rlink-velocity-total    ;; totalled velocity of agents on this link over all steps
   rlink-vsteps      ;; number of steps
 ]
 
@@ -258,7 +258,7 @@ to make-road [oid n0id n1id len rtype points]
 end
 
 to-report vcells-per-step2metres-per-second [v]
-  report v * patch2mapd vcell-d / vehicle-timestep / .044704
+  report v * patch2mapd vcell-d / agent-timestep / .044704
 end
 
 ;; speed limit of road, in vcells
@@ -350,13 +350,13 @@ to-report parse-timeline-action [a]
     report (list "sealevel" lev)
   ] [ifelse verb = "test" or verb = "evacuate" [
     report a
-  ] [ifelse verb = "vehicle" [
+  ] [ifelse verb = "agent" [
     if length a != 2 [
-      abort (word "invalid vehicle creation entry: " a)
+      abort (word "invalid agent creation entry: " a)
     ]
     let vt item 1 a
-    if not table:has-key? vehicle-types vt [
-      abort (word "invalid vehicle type (" vt ") in " a)
+    if not table:has-key? agent-types vt [
+      abort (word "invalid agent type (" vt ") in " a)
     ]
     report a
   ] [
@@ -429,7 +429,7 @@ to read-timeline
     ]
   ]
   set timeline reverse timeline
-  ;;ask vehicles [
+  ;;ask agents [
    ;;  if ve-type = "kids" [
     ;;    set color pink
     ;; ]
@@ -917,16 +917,16 @@ to colour-patch
     ifelse known-depth > 0 [
       set pcolor [55 0 225]
     ][
-      ifelse vehicle-count = 0 [
+      ifelse agent-count = 0 [
         set pcolor [170 170 170]
       ] [
-let avg total-speed / vehicle-count
+let avg total-speed / agent-count
 if avg > 4 [
   inspect self
-    abort (word "average speed too high (" total-speed "/" vehicle-count ")")
+    abort (word "average speed too high (" total-speed "/" agent-count ")")
 ]
-        set pcolor scale-color red (total-speed / vehicle-count) 0 4
-        ;;set pcolor black  ;; (scale-color green vehicle-count 2 0)
+        set pcolor scale-color red (total-speed / agent-count) 0 4
+        ;;set pcolor black  ;; (scale-color green agent-count 2 0)
       ]
     ]
   ]
@@ -970,18 +970,18 @@ to flood-cell
       set rlink-depth depth - [road-elevation] of rlink-road
       if rlink-depth >= drown-depthC [
         if rlink-depth < drown-depthA [
-          set vehicles-drownedC vehicles-drownedC + rlink-strandedC
-          set vehicles-drowned vehicles-drowned + rlink-strandedC
-          ;;set vehicles-isolatedC vehicles-isolatedC - rlink-strandedC
-          set vehicles-isolated vehicles-isolated - rlink-stranded
+          set agents-drownedC agents-drownedC + rlink-strandedC
+          set agents-drowned agents-drowned + rlink-strandedC
+          ;;set agents-isolatedC agents-isolatedC - rlink-strandedC
+          set agents-isolated agents-isolated - rlink-stranded
       ]
       ]
       if rlink-depth >= drown-depthA [
-        set vehicles-drownedA vehicles-drownedA + rlink-strandedA
-        set vehicles-drownedC vehicles-drownedC + rlink-strandedC
-        set vehicles-drowned vehicles-drowned + rlink-strandedA + rlink-strandedC
-        ;;set vehicles-isolatedA vehicles-isolatedA - rlink-strandedA
-        set vehicles-isolated vehicles-isolated - rlink-stranded
+        set agents-drownedA agents-drownedA + rlink-strandedA
+        set agents-drownedC agents-drownedC + rlink-strandedC
+        set agents-drowned agents-drowned + rlink-strandedA + rlink-strandedC
+        ;;set agents-isolatedA agents-isolatedA - rlink-strandedA
+        set agents-isolated agents-isolated - rlink-stranded
       ]
       set rlink-strandedA 0
       set rlink-strandedC 0
@@ -1103,7 +1103,7 @@ to setup
   read-map
   read-streams
   read-building-codes
-  vehicle-init
+  agent-init
   ifelse no-roads = 0 [
     read-roads
    ][
@@ -1164,8 +1164,8 @@ to perform-action [actions]
   ] [ifelse verb = "sealevel" [
     set sealevel item 1 action
     print (word "-- sealevel " sealevel)
-  ] [ifelse verb = "vehicle" [
-    make-vehicle item 1 action
+  ] [ifelse verb = "agent" [
+    make-agent item 1 action
   ] [if verb = "evacuate" [
     print "-- evacuate!"
     set evacuate? true
@@ -1215,18 +1215,18 @@ to model-step
     let dfn item 0 ?
     let m item 1 ?
     let actions item 2 ?
-    let n event-count m dfn vehicle-timestep ticks
+    let n event-count m dfn agent-timestep ticks
     repeat n [
       perform-action actions
     ]
   ]
   if evacuate? [
-    ask vehicles with [not ve-evacuate?] [set ve-evacuate? true]
+    ask agents with [not ve-evacuate?] [set ve-evacuate? true]
     set evacuate? false
   ]
-  ask vehicles [vehicle-step]
+  ask agents [agent-step]
   let t ticks
-  tick-advance vehicle-timestep
+  tick-advance agent-timestep
   if int ticks != int t [
     water-step
   ]
@@ -1241,35 +1241,35 @@ to model-step
   ]
 end
 
-;; Plot the number of vehicles drowned etc.
+;; Plot the number of agents drowned etc.
 to setup-plots
-  let vehicle-max-plot 100
-  if vehicles-drowned > 100  [ set vehicle-max-plot vehicles-driving ]
+  let agent-max-plot 100
+  if agents-drowned > 100  [ set agent-max-plot agents-driving ]
 
   set-current-plot "Timeseries of Pedestrians at High Risk"
-  set-plot-y-range 0 vehicle-max-plot
+  set-plot-y-range 0 agent-max-plot
   set-current-plot-pen "Total"
-  plot vehicles-drowned
+  plot agents-drowned
   set-current-plot-pen "Adults"
-  plot vehicles-drownedA
+  plot agents-drownedA
   set-current-plot-pen "Children"
-  plot vehicles-drownedC
+  plot agents-drownedC
 
 
-  ;; Count vehicles in evacuee point
+  ;; Count agents in evacuee point
   set evacuees 0
-  ask vehicles [if ve-carpark = (node 1677) [set evacuees (evacuees + 1) ] ]
+  ask agents [if ve-carpark = (node 1677) [set evacuees (evacuees + 1) ] ]
 
   let evac-max-plot 100
-  if evacuees > 100  [ set vehicle-max-plot evacuees ]
+  if evacuees > 100  [ set agent-max-plot evacuees ]
 
   set-current-plot "People Evacuated"
-  set-plot-y-range 0 vehicle-max-plot
+  set-plot-y-range 0 agent-max-plot
   plot evacuees
 
 
   let buildings-max-plot 100
-  if residential-flooded > 100  [ set vehicle-max-plot vehicles-driving ]
+  if residential-flooded > 100  [ set agent-max-plot agents-driving ]
 
   set-current-plot "Timeseries of buildings flooded"
   set-plot-y-range 0 buildings-max-plot
@@ -1279,19 +1279,19 @@ to setup-plots
   plot nonresidential-flooded
 
   ;;set-current-plot "Timeseries of Adults drowning"
-  ;;set-plot-y-range 0 vehicle-max-plot
-  ;;plot vehicles-drownedA
+  ;;set-plot-y-range 0 agent-max-plot
+  ;;plot agents-drownedA
 
   ;;set-current-plot "Timeseries of Children drowning"
-  ;;set-plot-y-range 0 vehicle-max-plot
-  ;;plot vehicles-drownedC
+  ;;set-plot-y-range 0 agent-max-plot
+  ;;plot agents-drownedC
 
 end
 
 to stats-reset
   set last-log ticks
   ask rlinks [
-    set rlink-vehicle-total 0
+    set rlink-agent-total 0
     set rlink-velocity-total 0
     set rlink-vsteps 0
   ]
@@ -1305,7 +1305,7 @@ to stats-log
       "link"
       "," [road-oid] of rlink-road
       "," (ifelse-value rlink-reverse? ["-"] ["+"])
-      "," rlink-vehicle-total
+      "," rlink-agent-total
       "," precision (rlink-velocity-total / rlink-vsteps) 3)
   ]
   file-flush
@@ -1433,8 +1433,8 @@ to write-final-report
 
   file-open-trunc (word scenario "/report.out")
   file-print (word "report," ticks)
-  ask vehicles with [ve-action = Dead] [
-    file-print (word "vehicle," csvquote ve-type "," (csvquote map [report-info ?] ve-death-info))
+  ask agents with [ve-action = Dead] [
+    file-print (word "agent," csvquote ve-type "," (csvquote map [report-info ?] ve-death-info))
   ]
   file-close
 end
