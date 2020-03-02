@@ -5,7 +5,7 @@
 import run
 
 
-vehicles = [
+agents = [
     ["kids", "home 1", [
         ["home 1", "daily 6:05 15m", "school",  0.9],
         ["home 1", "daily 6:05 3h", "some other", 0.1],
@@ -86,7 +86,7 @@ sea_levels = [4, 5, 6]
 
 
 r = run.Run(in_dir='tests/kibera',
-            vehicles=vehicles,
+            agents=agents,
             width=297,
             height=104,
             start_time='7:45',
@@ -103,15 +103,15 @@ for defence in defences:
                         [
                             ["normal", "08:00", "15m"],
                             500,
-                            ["vehicle", "transit eastbound"],
+                            ["agent", "transit eastbound"],
                             0.8,
-                            ["vehicle", "transit westbound"],
+                            ["agent", "transit westbound"],
                             0.2
                         ],
                         [
                             "0s",
-                            10, # number of vehicles
-                            ["vehicle", "kids"]
+                            10, # number of agents
+                            ["agent", "kids"]
                         ],
                         [
                             "07:54",

@@ -1,4 +1,4 @@
-__includes ["model.nls" "pathfindshow.nls" "pathfind.nls" "simple-hydro.nls" "vehicle.nls"]
+__includes ["model.nls" "pathfindshow.nls" "pathfind.nls" "simple-hydro.nls" "agent.nls"]
 
 extensions [table profiler line array2 pq math]
 
@@ -120,7 +120,7 @@ MONITOR
 95
 213
 diverted
-vehicles-diverted
+agents-diverted
 17
 1
 11
@@ -131,7 +131,7 @@ MONITOR
 170
 212
 drowned
-vehicles-drowned\n
+agents-drowned\n
 17
 1
 11
@@ -164,7 +164,7 @@ MONITOR
 244
 212
 isolated
-vehicles-isolated
+agents-isolated
 0
 1
 11
@@ -186,7 +186,7 @@ MONITOR
 238
 164
 driving
-vehicles-driving
+agents-driving
 17
 1
 11
@@ -294,7 +294,7 @@ MONITOR
 245
 263
 NIL
-vehicle-total
+agent-total
 17
 1
 11
@@ -316,7 +316,7 @@ MONITOR
 1210
 172
 NIL
-vehicles-unparking\n
+agents-unparking\n
 17
 1
 11
@@ -326,9 +326,9 @@ PLOT
 321
 234
 441
-Timeseries of drowned vehicles
+Timeseries of drowned agents
 Time
-Vehicles drowned
+agents drowned
 0.0
 10.0
 0.0

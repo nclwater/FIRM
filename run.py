@@ -21,7 +21,7 @@ class Run:
                  in_dir,
                  width,
                  height,
-                 vehicles,
+                 agents,
                  start_time,
                  end_time):
         self.in_dir = in_dir
@@ -30,7 +30,7 @@ class Run:
             os.mkdir(self.out_dir)
         self.nlogo_file = 'model.nlogo'
         self.setup_file = os.path.join(self.out_dir, 'setup.xml')
-        self.vehicles = vehicles
+        self.vehicles = agents
         self.width = width
         self.height = height
         self.start_time = start_time
@@ -63,7 +63,7 @@ class Run:
         exit_condition.text = 'ticks &gt; end-time'
 
         metric = SubElement(experiment, 'metric')
-        metric.text = '(list end-time vehicles-drowned vehicles-diverted vehicles-isolated)'
+        metric.text = '(list end-time agents-drowned agents-diverted agents-isolated)'
 
         def quote(string):
             return "&quot;{}&quot;".format(string)
@@ -108,7 +108,7 @@ class Run:
         if seed is None:
             seed = [0]
 
-        self.write_data_file('vehicles.txt', self.vehicles)
+        self.write_data_file('agents.txt', self.vehicles)
         for sc in seed:
             self.write_data_file('timeline.txt', timeline)
             self.generate_setup(sc)

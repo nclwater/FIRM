@@ -5,7 +5,7 @@
 import run
 
 
-vehicles = [
+agents = [
     ["kids & work", "home 1", [
         ["home 1", "daily 7:46 0m", "school", 1],
         ["school", "5m 1m", "work", 0.9],
@@ -53,7 +53,7 @@ warning_times = ["07:50:00", "07:51:00", "07:52:00"]
 sea_levels = [4, 5, 6]
 
 r = run.Run(in_dir='tests/towyn',
-            vehicles=vehicles,
+            agents=agents,
             width=249,
             height=179,
             start_time='7:45',
@@ -67,15 +67,15 @@ for defence in defences:
                         [
                             ["normal", "08:00", "15m"],
                             500,
-                            ["vehicle", "transit eastbound"],
+                            ["agent", "transit eastbound"],
                             0.8,
-                            ["vehicle", "transit westbound"],
+                            ["agent", "transit westbound"],
                             0.2
                         ],
                         [
                             "0s",
-                            10, # number of vehicles
-                            ["vehicle", "kids & work"]
+                            10, # number of agents
+                            ["agent", "kids & work"]
                         ],
                         [
                             "07:54",
