@@ -1258,7 +1258,7 @@ to setup-plots
 
   ;; Count agents in evacuee point
   set evacuees 0
-  ask agents [if ve-carpark = (node 1677) [set evacuees (evacuees + 1) ] ]
+  ;; ask agents [if ve-carpark = (node 1677) [set evacuees (evacuees + 1) ] ]
 
   let evac-max-plot 100
   if evacuees > 100  [ set agent-max-plot evacuees ]
