@@ -370,7 +370,7 @@ end
 ;; from sporadic events (in sporadic).
 to read-timeline
   file-close-all
-  let filename (word scenario "/out/timeline.txt")
+  let filename (word scenario "/timeline.txt")
   print (word "-- reading " filename)
   file-open filename
   let b file-read
@@ -597,7 +597,7 @@ end
 to read-streams
    file-close-all
 
-   let filename(word scenario "/Streams.txt")
+   let filename(word scenario "/streams.txt")
 
    if file-exists? filename [
         print (word "-- reading " filename)
@@ -1139,7 +1139,7 @@ to setup
   ] [
     set logging? true
     set log-interval-t parse-time log-interval
-    file-open-trunc (word scenario "out/stats.out")
+    file-open-trunc (word scenario "/stats.out")
     file-print (word "start," ticks)
     file-flush
   ]
@@ -1298,7 +1298,7 @@ to stats-reset
 end
 
 to stats-log
-  file-open (word scenario "/out/stats.out")
+  file-open (word scenario "/stats.out")
   file-print (word "dump," (ticks - time-started))
   ask rlinks with [rlink-vsteps > 0] [
     file-print (word
@@ -1313,7 +1313,7 @@ to stats-log
 end
 
 to write-flood-map
-  file-open-trunc (word scenario "/out/floodmap.out")
+  file-open-trunc (word scenario "/floodmap.out")
   file-print (word "ncols " ncols)
   file-print (word "nrows " nrows)
   file-print (word "xllcorner " xllcorner)
@@ -1341,7 +1341,7 @@ to write-flood-map
 end
 
 to write-floodtime-map
-  file-open-trunc (word scenario "/out/floodtimemap.out")
+  file-open-trunc (word scenario "/floodtimemap.out")
   file-print (word "ncols " ncols)
   file-print (word "nrows " nrows)
   file-print (word "xllcorner " xllcorner)
@@ -1431,7 +1431,7 @@ to write-final-report
   write-flood-map
   write-floodtime-map
 
-  file-open-trunc (word scenario "/out/report.out")
+  file-open-trunc (word scenario "/report.out")
   file-print (word "report," ticks)
   ask agents with [ve-action = Dead] [
     file-print (word "agent," csvquote ve-type "," (csvquote map [report-info ?] ve-death-info))

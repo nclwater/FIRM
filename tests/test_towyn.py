@@ -3,6 +3,7 @@
 
 
 import run
+import os
 
 
 agents = [
@@ -52,7 +53,18 @@ warning_times = ["07:50:00", "07:51:00", "07:52:00"]
 
 sea_levels = [4, 5, 6]
 
-r = run.Run(in_dir='tests/towyn',
+if not os.path.exists('tests/outputs'):
+    os.mkdir('tests/outputs')
+
+inputs_path = 'tests/towyn'
+model_path = 'tests/outputs/towyn'
+
+r = run.Run(model_path=model_path,
+            codes_path=os.path.join(inputs_path, 'codes.txt'),
+            defences_path=os.path.join(inputs_path, 'defences.txt'),
+            preprocessed_buildings_path=os.path.join(inputs_path, 'preprocessed-buildings.txt'),
+            roads_path=os.path.join(inputs_path, 'roads.txt'),
+            terrain_path=os.path.join(inputs_path, 'terrain.txt'),
             agents=agents,
             width=249,
             height=179,

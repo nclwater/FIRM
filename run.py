@@ -6,6 +6,7 @@ import os
 import shutil
 import glob
 import pprint
+from shutil import copyfile
 
 from xml.etree.ElementTree import Element, SubElement
 
@@ -19,12 +20,18 @@ netlogo = os.environ['NETLOGO']
 
 class Run:
     def __init__(self,
-                 in_dir,
+                 model_path,
+                 codes_path,
+                 defences_path,
+                 preprocessed_buildings_path,
+                 roads_path,
+                 terrain_path,
                  width,
                  height,
                  agents,
                  start_time,
-                 end_time):
+                 end_time,
+                 streams_path=None):
         """"
 
         Agents structure:
@@ -43,12 +50,23 @@ class Run:
         ]
 
         """
-        self.in_dir = in_dir
-        self.out_dir = os.path.join(in_dir, 'out')
-        if not os.path.exists(self.out_dir):
-            os.mkdir(self.out_dir)
+        self.model_path = model_path
+        if not os.path.exists(model_path):
+            os.mkdir(model_path)
+
+        for src, dest in [
+            [codes_path, 'codes.txt'],
+            [defences_path, 'defences.txt'],
+            [preprocessed_buildings_path, 'preprocessed-buildings.txt'],
+            [roads_path, 'roads.txt'],
+            [terrain_path, 'terrain.txt'],
+            [streams_path, 'streams.txt']
+        ]:
+            if src is not None:
+                copyfile(src, self.path(dest))
+
         self.nlogo_file = 'model.nlogo'
-        self.setup_file = os.path.join(self.out_dir, 'setup.xml')
+        self.setup_file = self.path('setup.xml')
         self.vehicles = agents
         self.width = width
         self.height = height
@@ -56,7 +74,7 @@ class Run:
         self.end_time = end_time
 
     def write_data_file(self, filename, sequence):
-        with open(self.out_dir + "/" + filename, "w") as f:
+        with open(self.model_path + "/" + filename, "w") as f:
             f.write(netlogo_representation(sequence))
             f.close()
 
@@ -87,7 +105,7 @@ class Run:
 
         for variable, value in [
             ('start-time', quote(self.start_time)),
-            ('Scenario', quote(str(self.in_dir))),
+            ('Scenario', quote(str(self.model_path))),
             ('heuristic-factor', '1.25'),
             ('log-interval', quote('2m')),
             ('end-time-str', quote(self.end_time)),
@@ -130,11 +148,15 @@ class Run:
             self.write_data_file('timeline.txt', timeline)
             self.write_setup_file(sc)
             self.run()
-            r = os.path.join(self.out_dir, name)
-            shutil.rmtree(r, True)
-            os.mkdir(r)
-            for f in glob.glob(self.out_dir + "/*.out"):
-                shutil.copy(f, r)
+            results_path = self.path(name)
+            shutil.rmtree(results_path, True)
+            os.mkdir(results_path)
+            for f in os.listdir(self.model_path):
+                if f.endswith('.out'):
+                    shutil.copy(self.path(f), results_path)
+
+    def path(self, path):
+        return os.path.join(self.model_path, path)
 
 
 def netlogo_representation(sequence: list):

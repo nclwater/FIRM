@@ -826,7 +826,7 @@ to-report compiled-states [spec start]
 end
 
 to read-agent-types
-  let filename (word scenario "/out/agents.txt")
+  let filename (word scenario "/agents.txt")
   print (word "-- reading " filename)
   file-open filename
 

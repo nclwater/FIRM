@@ -3,6 +3,7 @@
 
 
 import run
+import os
 
 
 agents = [
@@ -84,8 +85,19 @@ warning_times = ["07:50:00", "07:55:00", "08:00:00"]
 
 sea_levels = [4, 5, 6]
 
+if not os.path.exists('tests/outputs'):
+    os.mkdir('tests/outputs')
 
-r = run.Run(in_dir='tests/kibera',
+model_path = 'tests/outputs/kibera'
+inputs_path = 'tests/kibera'
+
+r = run.Run(model_path=model_path,
+            codes_path=os.path.join(inputs_path, 'codes.txt'),
+            defences_path=os.path.join(inputs_path, 'defences.txt'),
+            preprocessed_buildings_path=os.path.join(inputs_path, 'preprocessed-buildings.txt'),
+            roads_path=os.path.join(inputs_path, 'roads.txt'),
+            streams_path=os.path.join(inputs_path, 'streams.txt'),
+            terrain_path=os.path.join(inputs_path, 'terrain.txt'),
             agents=agents,
             width=297,
             height=104,
