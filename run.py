@@ -38,9 +38,7 @@ class Run:
 
     def write_data_file(self, filename, sequence):
         with open(self.out_dir + "/" + filename, "w") as f:
-            for component in sequence:
-                f.write(netlogo_representation(component))
-                f.write('\n')
+            f.write(netlogo_representation(sequence))
             f.close()
 
     def write_setup_file(self, seed):
@@ -120,15 +118,11 @@ class Run:
                 shutil.copy(f, r)
 
 
-def netlogo_representation(x):
-    if isinstance(x, list):
-        return '[' + ' '.join(map(netlogo_representation, x)) + ']'
-    elif isinstance(x, str):
-        r = '"'
-        for c in x:
-            if c == '"':
-                r += '\\'
-            r += c
-        return r + '"'
-    else:
-        return repr(x)
+def netlogo_representation(sequence: list):
+    """
+
+    :param sequence:
+    :return:
+    """
+
+    return str(sequence).replace(',', ' ').replace('"', '\\').replace("'", '"')[1:-1]
