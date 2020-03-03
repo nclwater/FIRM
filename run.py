@@ -4,7 +4,6 @@
 import subprocess
 import os
 import shutil
-import glob
 import pprint
 from shutil import copyfile
 
