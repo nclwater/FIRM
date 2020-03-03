@@ -5,6 +5,7 @@ import subprocess
 import os
 import shutil
 import glob
+import pprint
 
 from xml.etree.ElementTree import Element, SubElement
 
@@ -24,6 +25,24 @@ class Run:
                  agents,
                  start_time,
                  end_time):
+        """"
+
+        Agents structure:
+
+        [
+            [
+                agent_type,
+                agent_location,
+                [
+                    origin,
+                    time,
+                    destination,
+                    probability
+                ]
+            ]
+        ]
+
+        """
         self.in_dir = in_dir
         self.out_dir = os.path.join(in_dir, 'out')
         if not os.path.exists(self.out_dir):
@@ -125,4 +144,4 @@ def netlogo_representation(sequence: list):
     :return:
     """
 
-    return str(sequence).replace(',', ' ').replace('"', '\\').replace("'", '"')[1:-1]
+    return pprint.pformat(sequence).replace(',', ' ').replace('"', '\\').replace("'", '"')[1:-1]
