@@ -108,8 +108,8 @@ r = run.Run(model_path=model_path,
 for defence in defences:
     for warning_time in warning_times:
         for sea_level in sea_levels:
-            r.start(name='{}-{}-{}'.format(defence, warning_time.replace(':', '.'), sea_level),
-                    timeline=
+            r.setup_and_run(name='{}-{}-{}'.format(defence, warning_time.replace(':', '.'), sea_level),
+                            timeline=
                     [
                     [
                         [
@@ -139,4 +139,4 @@ for defence in defences:
                         ]
                     ]
                 ]
-                    )
+                            )

@@ -53,9 +53,9 @@ warning_times = ["07:50:00", "07:51:00", "07:52:00"]
 
 sea_levels = [4, 5, 6]
 
-codes = read_netlogo_representation('tests/towyn/codes')
+codes = read_netlogo_representation('tests/towyn/codes.txt')
 
-defences = read_netlogo_representation('tests/towyn/defences')
+defences = read_netlogo_representation('tests/towyn/defences.txt')
 
 defences_to_breach = ["a"]
 
@@ -63,23 +63,15 @@ buildings = read_netlogo_representation('tests/towyn/preprocessed-buildings.txt'
 
 roads = read_netlogo_representation('tests/towyn/roads.txt')
 
+terrain = read_netlogo_representation('tests/towyn/terrain.txt')
+
 if not os.path.exists('tests/outputs'):
     os.mkdir('tests/outputs')
 
 inputs_path = 'tests/towyn'
 model_path = 'tests/outputs/towyn'
 
-model_path=model_path,
-codes_path=os.path.join(inputs_path, 'codes.txt'),
-defences_path=os.path.join(inputs_path, 'defences.txt'),
-preprocessed_buildings_path=os.path.join(inputs_path, 'preprocessed-buildings.txt'),
-roads_path=os.path.join(inputs_path, 'roads.txt'),
-terrain_path=os.path.join(inputs_path, 'terrain.txt'),
-agents=agents,
-width=249,
-height=179,
-start_time='7:45',
-end_time='8:20'
+scenarios = []
 
 for defence in defences_to_breach:
     for warning_time in warning_times:
@@ -114,19 +106,20 @@ for defence in defences_to_breach:
                 ]
             ]
 
+            scenarios.append(
+                Scenario(path='tests/outputs/towyn-defence-{}-evacuation-{}-sea-{}'.format(defence,
+                                                                                           warning_time.replace(':', ''),
+                                                                                           sea_level),
+                         start_time='7:45',
+                         end_time='8:20',
+                         agents=agents,
+                         timeline=timeline,
+                         codes=codes,
+                         defences=defences,
+                         buildings=buildings,
+                         roads=roads,
+                         terrain=terrain))
 
+        r = run.Run(scenarios=scenarios)
 
-            scenario = Scenario(path='tests/outputs/towyn-defence-{}-evacuation-{}-sea-{}'.format(defence,
-                                                                                                  warning_time.replace(':', ''),
-                                                                                                  sea_level),
-                                start_time='7:45',
-                                end_time='8:20',
-                                agents=agents,
-                                timeline=timeline,
-                                codes=codes,
-                                defences=defences,
-                                buildings=buildings,
-                                roads=roads,
-                                terrain=terrain)
-
-            r.start(name='{}-{}-{}'.format(defence, warning_time.replace(':', '.'), sea_level), )
+        r.setup_and_run()

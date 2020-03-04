@@ -1,5 +1,6 @@
 import pprint
 import ast
+import re
 
 
 def netlogo_representation(sequence: list):
@@ -14,21 +15,14 @@ def netlogo_representation(sequence: list):
 
 def read_netlogo_representation(path):
     with open(path) as f:
-        string = f.read()
+        lines = f.readlines()
 
-    new_string = ''
-    in_quotes = False
-    for i, char in enumerate(string):
+    lines = [line for line in lines if not line.startswith(';')]
 
-        if char == '"':
-            in_quotes = not in_quotes
+    string = ''.join(lines).replace('][', '],[')
+    string = re.sub("\s+", ",",string.strip())
 
-        if char == ' ':
-            if string[i-1] not in [' ', '\n'] and not in_quotes:
-                char = ', '
-        new_string += char
-
-    return ast.literal_eval('['+new_string+']')
+    return ast.literal_eval('['+string+']')
 
 
 
