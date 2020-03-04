@@ -1,3 +1,5 @@
+import pprint
+
 class Scenario:
     def __init__(self,
                  path,
@@ -25,3 +27,17 @@ class Scenario:
 
     def create_input_files(self):
         pass
+
+    def write_data_file(self, filename, sequence):
+        with open(self.path + "/" + filename, "w") as f:
+            f.write(netlogo_representation(sequence))
+            f.close()
+
+def netlogo_representation(sequence: list):
+    """
+
+    :param sequence:
+    :return:
+    """
+
+    return pprint.pformat(sequence).replace(',', ' ').replace('"', '\\').replace("'", '"')[1:-1]

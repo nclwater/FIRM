@@ -4,7 +4,6 @@
 import subprocess
 import os
 import shutil
-import pprint
 from shutil import copyfile
 
 from xml.etree.ElementTree import Element, SubElement
@@ -70,11 +69,6 @@ class Run:
         self.height = height
         self.start_time = start_time
         self.end_time = end_time
-
-    def write_data_file(self, filename, sequence):
-        with open(self.model_path + "/" + filename, "w") as f:
-            f.write(netlogo_representation(sequence))
-            f.close()
 
     def write_setup_file(self, seed=1):
 
@@ -155,13 +149,3 @@ class Run:
 
     def path(self, path):
         return os.path.join(self.model_path, path)
-
-
-def netlogo_representation(sequence: list):
-    """
-
-    :param sequence:
-    :return:
-    """
-
-    return pprint.pformat(sequence).replace(',', ' ').replace('"', '\\').replace("'", '"')[1:-1]
