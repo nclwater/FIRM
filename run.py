@@ -3,8 +3,6 @@
 
 import subprocess
 import os
-import shutil
-from shutil import copyfile
 
 from xml.etree.ElementTree import Element, SubElement
 
