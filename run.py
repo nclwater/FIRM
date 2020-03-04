@@ -67,7 +67,6 @@ class Run:
 
         for variable, value in [
             ('start-time', quote(self.scenarios[0].start_time)),
-            ('Scenario', quote(str(self.scenarios[0].path))),
             ('heuristic-factor', '1.25'),
             ('log-interval', quote('2m')),
             ('end-time-str', quote(self.scenarios[0].end_time)),
@@ -78,6 +77,12 @@ class Run:
         ]:
             element = SubElement(experiment, 'enumeratedValueSet', {'variable': variable})
             SubElement(element, 'value', {'value': value})
+
+        element = SubElement(experiment, 'enumeratedValueSet', {'variable': 'Scenario'})
+        for scenario in self.scenarios:
+
+            SubElement(element, 'value', {'value': quote(str(scenario.path))})
+
         header = r'<?xml version="1.0" encoding="utf-8"?><!DOCTYPE experiments SYSTEM "behaviorspace.dtd">'
         dom = minidom.parseString(header + ElementTree.tostring(experiments).decode('utf-8'))
         with open(self.setup_path, 'w') as f:
