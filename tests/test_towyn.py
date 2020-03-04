@@ -110,6 +110,8 @@ for defence in defences_to_breach:
                 Scenario(path='tests/outputs/towyn-defence-{}-evacuation-{}-sea-{}'.format(defence,
                                                                                            warning_time.replace(':', ''),
                                                                                            sea_level),
+                         width=249,
+                         height=179,
                          start_time='7:45',
                          end_time='8:20',
                          agents=agents,

@@ -3,6 +3,8 @@ import pprint
 class Scenario:
     def __init__(self,
                  path,
+                 width,
+                 height,
                  start_time,
                  end_time,
                  agents,
@@ -14,6 +16,8 @@ class Scenario:
                  terrain,
                  streams=None):
         self.path = path
+        self.width = width
+        self.height = height
         self.start_time = start_time
         self.end_time = end_time
         self.agents = agents

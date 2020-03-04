@@ -67,7 +67,7 @@ class Run:
 
         for variable, value in [
             ('start-time', quote(self.scenarios[0].start_time)),
-            ('Scenario', quote(str(self.scenarios[0].model_path))),
+            ('Scenario', quote(str(self.scenarios[0].path))),
             ('heuristic-factor', '1.25'),
             ('log-interval', quote('2m')),
             ('end-time-str', quote(self.scenarios[0].end_time)),
@@ -80,7 +80,7 @@ class Run:
             SubElement(element, 'value', {'value': value})
         header = r'<?xml version="1.0" encoding="utf-8"?><!DOCTYPE experiments SYSTEM "behaviorspace.dtd">'
         dom = minidom.parseString(header + ElementTree.tostring(experiments).decode('utf-8'))
-        with open(self.scenarios[0].setup_file, 'w') as f:
+        with open(self.setup_path, 'w') as f:
             f.write(unescape(dom.toprettyxml()))
 
     def run(self):
