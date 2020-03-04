@@ -26,7 +26,19 @@ class Scenario:
         self.streams = streams
 
     def create_input_files(self):
-        pass
+        for sequence, filename in [
+
+            [self.agents, 'agents.txt',
+             self.timeline, 'timeline.txt',
+             self.codes, 'codes.txt',
+             self.defences, 'defences.txt',
+             self.buildings, 'buildings.txt',
+             self.roads, 'roads.txt',
+             self.terrain, 'terrain.txt',
+             self.streams, 'streams.txt']
+        ]:
+            if sequence is not None:
+                self.write_data_file(filename, sequence)
 
     def write_data_file(self, filename, sequence):
         with open(self.path + "/" + filename, "w") as f:
