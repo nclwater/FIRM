@@ -6,7 +6,10 @@ from xml.sax.saxutils import unescape
 
 
 class Scenario:
-    def __init__(self, path,
+    def __init__(self,
+                 path,
+                 start_time,
+                 end_time,
                  agents,
                  timeline,
                  codes,
@@ -16,6 +19,8 @@ class Scenario:
                  terrain,
                  streams=None):
         self.path = path
+        self.start_time = start_time
+        self.end_time = end_time
         self.agents = agents
         self.timeline = timeline
         self.codes = codes
