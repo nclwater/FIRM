@@ -6,7 +6,15 @@ from xml.sax.saxutils import unescape
 
 
 class Scenario:
-    def __init__(self, path, agents, timeline, codes, defences, buildings, roads, terrain, streams=None):
+    def __init__(self, path,
+                 agents,
+                 timeline,
+                 codes,
+                 defences,
+                 buildings,
+                 roads,
+                 terrain,
+                 streams=None):
         self.path = path
         self.agents = agents
         self.timeline = timeline
