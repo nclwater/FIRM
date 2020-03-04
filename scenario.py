@@ -39,7 +39,7 @@ class Scenario:
             [self.timeline, 'timeline.txt'],
             [self.codes, 'codes.txt'],
             [self.defences, 'defences.txt'],
-            [self.buildings, 'buildings.txt'],
+            [self.buildings, 'preprocessed-buildings.txt'],
             [self.roads, 'roads.txt'],
             [self.terrain, 'terrain.txt'],
             [self.streams, 'streams.txt']
