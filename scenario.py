@@ -67,8 +67,20 @@ class Scenario:
 
         :param codes: names for building and road types
         :param defences: geometries of flood defences
-        :param buildings: geometries of buildings
+        :param buildings: locations of buildings
+
+            [
+                [x, y, code, nearest_road_link]
+                ...
+            ]
+
         :param roads: geometries of roads
+
+            [
+                [road_id, origin_node_id, destination_node_id, [[x, y] ...]]
+                ...
+            ]
+
         :param terrain: digital elevation model
         :param streams: gridded representation of streams
         """
