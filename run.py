@@ -17,24 +17,6 @@ model = 'model.nlogo'
 
 class Run:
     def __init__(self, scenarios, setup_path='setup.xml'):
-        """"
-
-        Agents structure:
-
-        [
-            [
-                agent_type,
-                agent_location,
-                [
-                    origin,
-                    time,
-                    destination,
-                    probability
-                ]
-            ]
-        ]
-
-        """
         self.scenarios = scenarios
         self.setup_path = setup_path
 
