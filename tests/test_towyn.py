@@ -122,6 +122,6 @@ for defence in defences_to_breach:
                          roads=roads,
                          terrain=terrain))
 
-        r = run.Run(scenarios=scenarios)
+r = run.Run(scenarios=scenarios)
 
-        r.setup_and_run()
+r.setup_and_run()

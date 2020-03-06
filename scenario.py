@@ -1,6 +1,7 @@
 from utils import netlogo_representation
 import os
 
+
 class Scenario:
     def __init__(self,
                  path,
