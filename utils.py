@@ -30,7 +30,7 @@ def convert_terrain(in_path, out_path):
     with open(in_path) as f:
         string = netlogo_representation([line.strip().split() for line in f.readlines()])
 
-    string = re.sub(r'"([\d\.])"', r'\1', string)
+    string = re.sub(r'"([\d\.-]+)"', r'\1', string)
 
     with open(out_path, 'w') as f:
         f.write(string)
