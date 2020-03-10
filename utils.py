@@ -50,6 +50,7 @@ def convert_roads(in_path, out_path, **kwargs):
     for highway in highways:
         highway_id = highway.attrib['id']
         nodes = highway.findall('nd')
+        highway_type = highway.find("*[@k='highway']").attrib['v']
         lats = []
         lons = []
         ids = []
@@ -65,7 +66,7 @@ def convert_roads(in_path, out_path, **kwargs):
 
         distance = cdist(np.transpose([x[:-1], y[:-1]]), np.transpose([x[1:], y[1:]])).sum().round(0).astype(int)
 
-        roads.append([highway_id, ids[0], ids[-1], distance, "Road Type", list(map(list, zip(x, y)))])
+        roads.append([highway_id, ids[0], ids[-1], distance, highway_type, list(map(list, zip(x, y)))])
 
 
     with open(out_path, 'w') as f:
