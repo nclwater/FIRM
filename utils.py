@@ -2,9 +2,11 @@ import pprint
 import ast
 import re
 import xml.etree.ElementTree as ET
+import numpy as np
 # import geopandas as gpd
 # from shapely.geometry import Point
 import ogr, osr
+from scipy.spatial.distance import cdist
 
 def netlogo_representation(sequence: list, **kwargs):
     """
@@ -61,7 +63,9 @@ def convert_roads(in_path, out_path, **kwargs):
 
         x, y = reproject(lats, lons, **kwargs)
 
-        roads.append([highway_id, ids[0], ids[-1], 0, "Road Type", list(map(list, zip(x, y)))])
+        distance = cdist(np.transpose([x[:-1], y[:-1]]), np.transpose([x[1:], y[1:]])).sum().round(0).astype(int)
+
+        roads.append([highway_id, ids[0], ids[-1], distance, "Road Type", list(map(list, zip(x, y)))])
 
 
     with open(out_path, 'w') as f:
