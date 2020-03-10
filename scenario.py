@@ -77,7 +77,7 @@ class Scenario:
         :param roads: geometries of roads
 
             [
-                [road_id, origin_node_id, destination_node_id, [[x, y] ...]]
+                [road_id, origin_node_id, destination_node_id, distance, road_type, [[x, y] ...]]
                 ...
             ]
 
