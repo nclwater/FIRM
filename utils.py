@@ -42,4 +42,25 @@ def convert_roads(in_path, out_path):
         tree = ET.fromstring(f.read())
 
     highways = tree.findall("way//*[@k='highway']..")
-    print(highways)
+    roads = []
+    for highway in highways:
+        highway_id = highway.attrib['id']
+        nodes = highway.findall('nd')
+        lats = []
+        lons = []
+        ids = []
+        for node in nodes:
+            node_id = node.attrib['ref']
+            element = tree.find("node[@id='{}']".format(node_id))
+            attrib = element.attrib
+            lats.append(attrib['lat'])
+            lons.append(attrib['lon'])
+            ids.append(node_id)
+
+        roads.append([highway_id, ids[0], ids[-1], 0, "Road Type", list(zip(lons, lats))])
+
+
+    with open(out_path, 'w') as f:
+        f.write(netlogo_representation(roads))
+
+
