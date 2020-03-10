@@ -1,6 +1,7 @@
 import pprint
 import ast
 import re
+import xml.etree.ElementTree as ET
 
 
 def netlogo_representation(sequence: list, **kwargs):
@@ -34,3 +35,11 @@ def convert_terrain(in_path, out_path):
 
     with open(out_path, 'w') as f:
         f.write(string)
+
+
+def convert_roads(in_path, out_path):
+    with open(in_path) as f:
+        tree = ET.fromstring(f.read())
+
+    highways = tree.findall("way//*[@k='highway']..")
+    print(highways)
