@@ -2,8 +2,9 @@ import pprint
 import ast
 import re
 import xml.etree.ElementTree as ET
-import geopandas as gpd
-from shapely.geometry import Point
+# import geopandas as gpd
+# from shapely.geometry import Point
+import ogr, osr
 
 def netlogo_representation(sequence: list, **kwargs):
     """
@@ -38,7 +39,7 @@ def convert_terrain(in_path, out_path):
         f.write(string)
 
 
-def convert_roads(in_path, out_path, epsg=21096):
+def convert_roads(in_path, out_path, **kwargs):
     with open(in_path) as f:
         tree = ET.fromstring(f.read())
 
@@ -58,16 +59,29 @@ def convert_roads(in_path, out_path, epsg=21096):
             lons.append(float(attrib['lon']))
             ids.append(node_id)
 
-        gdf = gpd.GeoDataFrame({'id': ids,
-                                'lat': lats,
-                                'lon': lons,
-                                'geometry': [Point(lon, lat) for lon, lat in zip(lons, lats)]
-                                }, crs={'init': 'epsg:4326'}).to_crs(epsg=epsg)
+        x, y = reproject(lats, lons, **kwargs)
 
-        roads.append([highway_id, ids[0], ids[-1], 0, "Road Type", list(map(list, zip(gdf.geometry.x, gdf.geometry.y)))])
+        roads.append([highway_id, ids[0], ids[-1], 0, "Road Type", list(map(list, zip(x, y)))])
 
 
     with open(out_path, 'w') as f:
         f.write(netlogo_representation(roads))
 
 
+def reproject(lats, lons, epsg=21096):
+    src = osr.SpatialReference()
+    src.ImportFromEPSG(4326)
+    dest = osr.SpatialReference()
+    dest.ImportFromEPSG(epsg)
+    transform = osr.CoordinateTransformation(src, dest)
+
+    x = []
+    y = []
+
+    for lat, lon in zip(lats, lons):
+        point = ogr.CreateGeometryFromWkt("POINT ({} {})".format(lon, lat))
+        point.Transform(transform)
+        x.append(point.GetX())
+        y.append(point.GetY())
+
+    return x, y
