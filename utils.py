@@ -73,6 +73,37 @@ def convert_roads(in_path, out_path, **kwargs):
         f.write(netlogo_representation(roads))
 
 
+def convert_buildings(in_path, out_path, **kwargs):
+    with open(in_path) as f:
+        tree = ET.fromstring(f.read())
+
+    buildings = tree.findall("way//*[@k='building']..")
+    roads = []
+    for building in buildings:
+        highway_id = building.attrib['id']
+        nodes = building.findall('nd')
+        building_type = building.find("*[@k='building']").attrib['v']
+        lats = []
+        lons = []
+        ids = []
+        for node in nodes:
+            node_id = node.attrib['ref']
+            element = tree.find("node[@id='{}']".format(node_id))
+            attrib = element.attrib
+            lats.append(float(attrib['lat']))
+            lons.append(float(attrib['lon']))
+            ids.append(node_id)
+
+        x, y = np.mean(np.transpose(reproject(lats, lons, **kwargs)), axis=0)
+
+        roads.append([x, y, 0, highway_id])
+
+
+    with open(out_path, 'w') as f:
+        f.write(netlogo_representation(roads))
+
+
+
 def reproject(lats, lons, epsg=21096):
     src = osr.SpatialReference()
     src.ImportFromEPSG(4326)
