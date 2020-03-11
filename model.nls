@@ -547,7 +547,8 @@ to read-map
     ]
   ]
   if (world-width != ncols or world-height != nrows) [
-    abort (word "arena size must be " ncols "x" nrows)
+    ;abort (word "arena size must be " ncols "x" nrows)
+    resize-world 0 ncols 0 nrows
   ]
   set minh 1500
   set maxh 2000
@@ -628,7 +629,8 @@ to read-streams
             ]
         ]
         if (world-width != ncols or world-height != nrows) [
-            abort (word "arena size must be " ncols "x" nrows)
+            ;abort (word "arena size must be " ncols "x" nrows)
+            resize-world 0 ncols 0 nrows
         ]
 
         ;; read rows

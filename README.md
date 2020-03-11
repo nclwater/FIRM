@@ -7,7 +7,7 @@ https://www.youtube.com/watch?v=o0EOlc5n9O8
 
 ## Dependencies
 
-- NetLogo Version 4 from https://ccl.northwestern.edu/netlogo/4.1.3/
+- NetLogo Version 4.1.3 from https://ccl.northwestern.edu/netlogo/4.1.3/
 
 ## Running from NetLogo GUI
 
