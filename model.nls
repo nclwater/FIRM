@@ -546,9 +546,9 @@ to read-map
       ]]]]]]
     ]
   ]
+  resize-world 0 ncols - 1 0 nrows - 1
   if (world-width != ncols or world-height != nrows) [
-    ;abort (word "arena size must be " ncols "x" nrows)
-    resize-world 0 ncols 0 nrows
+    abort (word "arena size must be " ncols "x" nrows " but it is " world-width "x" world-height)
   ]
   set minh 1500
   set maxh 2000
@@ -627,10 +627,6 @@ to read-streams
             print (word "-- unexpected value: " name)
             ]]]]]]
             ]
-        ]
-        if (world-width != ncols or world-height != nrows) [
-            ;abort (word "arena size must be " ncols "x" nrows)
-            resize-world 0 ncols 0 nrows
         ]
 
         ;; read rows
