@@ -34,7 +34,11 @@ def read_netlogo_representation(path):
 def convert_terrain(in_path, out_path):
 
     with open(in_path) as f:
-        string = netlogo_representation([line.strip().split() for line in f.readlines()])
+        lines = [line.strip().split() for line in f.readlines()]
+
+    lines.insert(6, [])
+
+    string = netlogo_representation(lines)
 
     string = re.sub(r'"([\d\.-]+)"', r'\1', string)
 
