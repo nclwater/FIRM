@@ -550,8 +550,8 @@ to read-map
   if (world-width != ncols or world-height != nrows) [
     abort (word "arena size must be " ncols "x" nrows " but it is " world-width "x" world-height)
   ]
-  set minh 1500
-  set maxh 2000
+  set minh 1000000
+  set maxh 0
   ask patches [
     set height 0
     set kind Undefined
@@ -575,15 +575,16 @@ to read-map
         ] [
           set kind Land
           set height ?
-          if (? < minh) [
-            set minh ?
-          ]
-          if (? > maxh) [
-            set maxh ?
-          ]
           ;;set pcolor red
         ]
-        set pcolor (scale-color brown height maxh minh)
+        if (height != nullheight) [
+            if (height < minh) [
+                set minh height
+            ]
+            if (height > maxh) [
+                set maxh height
+            ]
+        ]
         set level height
         set undefended-height height
         set flood-time false
@@ -593,6 +594,11 @@ to read-map
     set y (y - 1)
   ]
   file-close
+
+  ask patches [
+    set pcolor (scale-color brown height maxh minh)
+  ]
+
 end
 
 to read-streams
