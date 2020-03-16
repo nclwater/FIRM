@@ -7,6 +7,7 @@ import numpy as np
 # from shapely.geometry import Point
 import ogr, osr
 from scipy.spatial.distance import cdist
+from scipy.spatial import cKDTree
 
 def netlogo_representation(sequence: list, **kwargs):
     """
@@ -73,16 +74,35 @@ def convert_roads(in_path, out_path, **kwargs):
         f.write(netlogo_representation(roads))
 
 
-def convert_buildings(in_path, out_path, **kwargs):
+def convert_buildings(in_path, roads_path, out_path, **kwargs):
     with open(in_path) as f:
         tree = ET.fromstring(f.read())
+
+    roads = read_netlogo_representation(roads_path)
+    x = []
+    y = []
+    node_ids = []
+
+    for road in roads:
+        _, origin, destination, _, _, coords = road
+        origin_x, origin_y = coords[0]
+        destination_x, destination_y = coords[-1]
+        node_ids.append(origin)
+        x.append(origin_x)
+        y.append(origin_y)
+
+        node_ids.append(destination)
+        x.append(destination_x)
+        y.append(destination_y)
+
+    nodes_kd_tree = cKDTree(np.transpose([x, y]))
 
     buildings = tree.findall("way//*[@k='building']..")
     roads = []
     for building in buildings:
-        highway_id = building.attrib['id']
+        # highway_id = building.attrib['id']
         nodes = building.findall('nd')
-        building_type = building.find("*[@k='building']").attrib['v']
+        # building_type = building.find("*[@k='building']").attrib['v']
         lats = []
         lons = []
         ids = []
@@ -95,8 +115,9 @@ def convert_buildings(in_path, out_path, **kwargs):
             ids.append(node_id)
 
         x, y = np.mean(np.transpose(reproject(lats, lons, **kwargs)), axis=0)
+        _, index = nodes_kd_tree.query([[x, y]])
 
-        roads.append([x, y, 0, highway_id])
+        roads.append([x, y, 0, node_ids[index[0]]])
 
 
     with open(out_path, 'w') as f:
