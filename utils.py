@@ -115,7 +115,7 @@ def reproject(lats, lons, epsg=21096):
     y = []
 
     for lat, lon in zip(lats, lons):
-        point = ogr.CreateGeometryFromWkt("POINT ({} {})".format(lon, lat))
+        point = ogr.CreateGeometryFromWkt("POINT ({} {})".format(lat, lon))
         point.Transform(transform)
         x.append(point.GetX())
         y.append(point.GetY())
