@@ -3,13 +3,13 @@ import ast
 import re
 import xml.etree.ElementTree as ET
 import numpy as np
-# import geopandas as gpd
-# from shapely.geometry import Point
-import ogr, osr
+import ogr
+import osr
 from scipy.spatial.distance import cdist
 from scipy.spatial import cKDTree
 
-def netlogo_representation(sequence: list, **kwargs):
+
+def create_netlogo_string(sequence: list, **kwargs):
     """
 
     :param sequence:
@@ -19,7 +19,7 @@ def netlogo_representation(sequence: list, **kwargs):
     return pprint.pformat(sequence, **kwargs).replace(',', ' ').replace('"', '\\').replace("'", '"')[1:-1]
 
 
-def read_netlogo_representation(path):
+def read_netlogo_file(path):
     with open(path) as f:
         lines = f.readlines()
 
@@ -38,7 +38,7 @@ def convert_terrain(in_path, out_path):
 
     lines.insert(6, [])
 
-    string = netlogo_representation(lines)
+    string = create_netlogo_string(lines)
 
     string = re.sub(r'"([\d\.-]+)"', r'\1', string)
 
@@ -75,14 +75,14 @@ def convert_roads(in_path, out_path, **kwargs):
 
 
     with open(out_path, 'w') as f:
-        f.write(netlogo_representation(roads))
+        f.write(create_netlogo_string(roads))
 
 
 def convert_buildings(in_path, roads_path, out_path, **kwargs):
     with open(in_path) as f:
         tree = ET.fromstring(f.read())
 
-    roads = read_netlogo_representation(roads_path)
+    roads = read_netlogo_file(roads_path)
     x = []
     y = []
     node_ids = []
@@ -123,10 +123,8 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
 
         roads.append([x, y, 0, node_ids[index[0]]])
 
-
     with open(out_path, 'w') as f:
-        f.write(netlogo_representation(roads))
-
+        f.write(create_netlogo_string(roads))
 
 
 def reproject(lats, lons, epsg=21096):

@@ -1,4 +1,4 @@
-from utils import netlogo_representation
+from utils import create_netlogo_string
 import os
 
 
@@ -124,5 +124,5 @@ class Scenario:
         if not os.path.exists(self.path):
             os.mkdir(self.path)
         with open(self.path + "/" + filename, "w") as f:
-            f.write(netlogo_representation(sequence))
+            f.write(create_netlogo_string(sequence))
             f.close()

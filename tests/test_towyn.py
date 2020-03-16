@@ -5,7 +5,7 @@
 import run
 import os
 from scenario import Scenario
-from utils import read_netlogo_representation
+from utils import read_netlogo_file
 
 
 agents = [
@@ -53,17 +53,17 @@ warning_times = ["07:50:00", "07:51:00", "07:52:00"]
 
 sea_levels = [4, 5, 6]
 
-codes = read_netlogo_representation('tests/towyn/codes.txt')
+codes = read_netlogo_file('tests/towyn/codes.txt')
 
-defences = read_netlogo_representation('tests/towyn/defences.txt')
+defences = read_netlogo_file('tests/towyn/defences.txt')
 
 defences_to_breach = ["a"]
 
-buildings = read_netlogo_representation('tests/towyn/preprocessed-buildings.txt')
+buildings = read_netlogo_file('tests/towyn/preprocessed-buildings.txt')
 
-roads = read_netlogo_representation('tests/towyn/roads.txt')
+roads = read_netlogo_file('tests/towyn/roads.txt')
 
-terrain = read_netlogo_representation('tests/towyn/terrain.txt')
+terrain = read_netlogo_file('tests/towyn/terrain.txt')
 
 if not os.path.exists('tests/outputs'):
     os.mkdir('tests/outputs')

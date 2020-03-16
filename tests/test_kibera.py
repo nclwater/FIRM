@@ -4,23 +4,23 @@
 import run
 import scenario
 import os
-from utils import read_netlogo_representation
+from utils import read_netlogo_file
 
-agents = read_netlogo_representation('tests/kibera/agents.txt')
+agents = read_netlogo_file('tests/kibera/agents.txt')
 
 defences_to_breach = ["a"]
 
-defences = read_netlogo_representation('tests/kibera/defences.txt')
+defences = read_netlogo_file('tests/kibera/defences.txt')
 
-roads = read_netlogo_representation('tests/kibera/roads.txt')
+roads = read_netlogo_file('tests/kibera/roads.txt')
 
-codes = read_netlogo_representation('tests/kibera/codes.txt')
+codes = read_netlogo_file('tests/kibera/codes.txt')
 
-terrain = read_netlogo_representation('tests/kibera/terrain.txt')
+terrain = read_netlogo_file('tests/kibera/terrain.txt')
 
-buildings = read_netlogo_representation('tests/kibera/preprocessed-buildings.txt')
+buildings = read_netlogo_file('tests/kibera/preprocessed-buildings.txt')
 
-streams = read_netlogo_representation('tests/kibera/streams.txt')
+streams = read_netlogo_file('tests/kibera/streams.txt')
 
 
 warning_times = ["07:50:00", "07:55:00", "08:00:00"]
