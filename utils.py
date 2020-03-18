@@ -71,7 +71,8 @@ def convert_roads(in_path, out_path, **kwargs):
 
         distance = cdist(np.transpose([x[:-1], y[:-1]]), np.transpose([x[1:], y[1:]])).sum().round(0).astype(int)
 
-        roads.append([highway_id, ids[0], ids[-1], distance, highway_type, list(map(list, zip(x, y)))])
+        # x and y coordinates are multiplied by 1000 because this is expected by netlogo code
+        roads.append([highway_id, ids[0], ids[-1], distance, highway_type, (np.transpose([x, y])*1000).tolist()])
 
 
     with open(out_path, 'w') as f:
@@ -99,12 +100,12 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
         x.append(destination_x)
         y.append(destination_y)
 
-    nodes_kd_tree = cKDTree(np.transpose([x, y]))
+    # convert x and y points back into actual coordinates by dividing by 1000
+    nodes_kd_tree = cKDTree(np.transpose([x, y])/1000)
 
     buildings = tree.findall("way//*[@k='building']..")
     roads = []
     for building in buildings:
-        # highway_id = building.attrib['id']
         nodes = building.findall('nd')
         # building_type = building.find("*[@k='building']").attrib['v']
         lats = []
