@@ -8,6 +8,11 @@ import osr
 from scipy.spatial.distance import cdist
 from scipy.spatial import cKDTree
 
+src = osr.SpatialReference()
+src.ImportFromEPSG(4326)
+dest = osr.SpatialReference()
+dest.ImportFromEPSG(21096)
+default_transform = osr.CoordinateTransformation(src, dest)
 
 def create_netlogo_string(sequence: list, **kwargs):
     """
@@ -56,23 +61,22 @@ def convert_roads(in_path, out_path, **kwargs):
         highway_id = highway.attrib['id']
         nodes = highway.findall('nd')
         highway_type = highway.find("*[@k='highway']").attrib['v']
-        lats = []
-        lons = []
+        xy = []
         ids = []
         for node in nodes:
             node_id = node.attrib['ref']
             element = tree.find("node[@id='{}']".format(node_id))
             attrib = element.attrib
-            lats.append(float(attrib['lat']))
-            lons.append(float(attrib['lon']))
+            xy.append(reproject(float(attrib['lat']), float(attrib['lon'])))
+
             ids.append(node_id)
 
-        x, y = reproject(lats, lons, **kwargs)
+        xy = np.array(xy)
 
-        distance = cdist(np.transpose([x[:-1], y[:-1]]), np.transpose([x[1:], y[1:]])).sum().round(0).astype(int)
+        distance = cdist(xy[:-1], xy[1:]).sum().round(0).astype(int)
 
         # x and y coordinates are multiplied by 1000 because this is expected by netlogo code
-        roads.append([highway_id, ids[0], ids[-1], distance, highway_type, (np.transpose([x, y])*1000).tolist()])
+        roads.append([highway_id, ids[0], ids[-1], distance, highway_type, (xy*1000).tolist()])
 
 
     with open(out_path, 'w') as f:
@@ -110,16 +114,16 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
         # building_type = building.find("*[@k='building']").attrib['v']
         lats = []
         lons = []
-        ids = []
         for node in nodes:
             node_id = node.attrib['ref']
             element = tree.find("node[@id='{}']".format(node_id))
             attrib = element.attrib
             lats.append(float(attrib['lat']))
             lons.append(float(attrib['lon']))
-            ids.append(node_id)
 
-        x, y = np.mean(np.transpose(reproject(lats, lons, **kwargs)), axis=0)
+        lat, lon = np.mean(np.transpose([lats, lons]), axis=0)
+
+        x, y = reproject(lat, lon)
         _, index = nodes_kd_tree.query([[x, y]])
 
         roads.append([x, y, 0, node_ids[index[0]]])
@@ -128,20 +132,9 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
         f.write(create_netlogo_string(roads))
 
 
-def reproject(lats, lons, epsg=21096):
-    src = osr.SpatialReference()
-    src.ImportFromEPSG(4326)
-    dest = osr.SpatialReference()
-    dest.ImportFromEPSG(epsg)
-    transform = osr.CoordinateTransformation(src, dest)
+def reproject(lat: float, lon: float, transform=default_transform):
 
-    x = []
-    y = []
+    point = ogr.CreateGeometryFromWkt("POINT ({} {})".format(lat, lon))
+    point.Transform(transform)
 
-    for lat, lon in zip(lats, lons):
-        point = ogr.CreateGeometryFromWkt("POINT ({} {})".format(lat, lon))
-        point.Transform(transform)
-        x.append(point.GetX())
-        y.append(point.GetY())
-
-    return x, y
+    return point.GetX(), point.GetY()
