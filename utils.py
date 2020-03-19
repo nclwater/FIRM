@@ -107,9 +107,9 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
     # convert x and y points back into actual coordinates by dividing by 1000
     nodes_kd_tree = cKDTree(np.transpose([x, y])/1000)
 
-    buildings = tree.findall("way//*[@k='building']..")
-    roads = []
-    for building in buildings:
+    building_ways = tree.findall("way//*[@k='building']..")
+    xy = []
+    for building in building_ways:
         nodes = building.findall('nd')
         # building_type = building.find("*[@k='building']").attrib['v']
         lats = []
@@ -123,13 +123,15 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
 
         lat, lon = np.mean(np.transpose([lats, lons]), axis=0)
 
-        x, y = reproject(lat, lon)
-        _, index = nodes_kd_tree.query([[x, y]])
+        xy.append(reproject(lat, lon))
 
-        roads.append([x, y, 0, node_ids[index[0]]])
+    xy = np.array(xy)
+    _, index = nodes_kd_tree.query(xy)
+    x, y = xy.T
+    buildings = [list(row) for row in zip(x, y, np.full(len(xy), 0), np.array(node_ids)[index])]
 
     with open(out_path, 'w') as f:
-        f.write(create_netlogo_string(roads))
+        f.write(create_netlogo_string(buildings))
 
 
 def reproject(lat: float, lon: float, transform=default_transform):
