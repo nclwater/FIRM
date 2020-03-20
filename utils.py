@@ -109,9 +109,10 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
 
     building_ways = tree.findall("way//*[@k='building']..")
     xy = []
+    types = []
     for building in building_ways:
         nodes = building.findall('nd')
-        # building_type = building.find("*[@k='building']").attrib['v']
+        types.append(buildings_types_lookup[building.find("*[@k='building']").attrib['v']])
         lats = []
         lons = []
         for node in nodes:
@@ -140,3 +141,7 @@ def reproject(lat: float, lon: float, transform=default_transform):
     point.Transform(transform)
 
     return point.GetX(), point.GetY()
+
+buildings_types_lookup = {
+
+}
