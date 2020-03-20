@@ -109,10 +109,10 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
 
     building_ways = tree.findall("way//*[@k='building']..")
     xy = []
-    types = []
+    building_types = []
     for building in building_ways:
         nodes = building.findall('nd')
-        types.append(buildings_types_lookup[building.find("*[@k='building']").attrib['v']])
+        building_types.append(buildings_types_lookup[building.find("*[@k='building']").attrib['v']])
         lats = []
         lons = []
         for node in nodes:
@@ -126,10 +126,18 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
 
         xy.append(reproject(lat, lon))
 
+    amenity_nodes = tree.findall("node//*[@k='amenity']..")
+    for amenity in amenity_nodes:
+        building_type = amenity.find("*[@k='amenity']").attrib['v']
+        if building_type in ['atm']:
+            continue
+        xy.append(reproject(amenity.attrib['lat'], amenity.attrib['lon']))
+        building_types.append(buildings_types_lookup[building_type])
+
     xy = np.array(xy)
     _, index = nodes_kd_tree.query(xy)
     x, y = xy.T
-    buildings = [list(row) for row in zip(x, y, np.full(len(xy), 0), np.array(node_ids)[index])]
+    buildings = [list(row) for row in zip(x, y, building_types, np.array(node_ids)[index])]
 
     with open(out_path, 'w') as f:
         f.write(create_netlogo_string(buildings))
@@ -143,5 +151,17 @@ def reproject(lat: float, lon: float, transform=default_transform):
     return point.GetX(), point.GetY()
 
 buildings_types_lookup = {
+    "yes": 0,
+    "commercial": -3,
+    "hut": 0,
+    "industrial": 830,
+    "residential": 0,
+    "bank": 320,
+    "fuel": 222,
+    "bus_station": 940,
+    "clinic": 660,
+    "mobile_money_agent": -3,
+    "recycling": -3,
+    "school": 610
 
 }
