@@ -1248,7 +1248,7 @@ end
 ;; Plot the number of agents drowned etc.
 to setup-plots
   let agent-max-plot 100
-  if agents-drowned > 100  [ set agent-max-plot agents-driving ]
+  ;if agents-drowned > 100  [ set agent-max-plot agents-driving ]
 
   set-current-plot "Timeseries of Pedestrians at High Risk"
   set-plot-y-range 0 agent-max-plot
