@@ -112,7 +112,8 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
     building_types = []
     for building in building_ways:
         nodes = building.findall('nd')
-        building_types.append(buildings_types_lookup[building.find("*[@k='building']").attrib['v']])
+        building_type = building.find("*[@k='building']").attrib['v']
+        building_types.append(buildings_types_lookup[building_type])
         lats = []
         lons = []
         for node in nodes:
@@ -129,8 +130,6 @@ def convert_buildings(in_path, roads_path, out_path, **kwargs):
     amenity_nodes = tree.findall("node//*[@k='amenity']..")
     for amenity in amenity_nodes:
         building_type = amenity.find("*[@k='amenity']").attrib['v']
-        if building_type in ['atm']:
-            continue
         xy.append(reproject(amenity.attrib['lat'], amenity.attrib['lon']))
         building_types.append(buildings_types_lookup[building_type])
 
@@ -150,6 +149,7 @@ def reproject(lat: float, lon: float, transform=default_transform):
 
     return point.GetX(), point.GetY()
 
+
 buildings_types_lookup = {
     "yes": 0,
     "commercial": -3,
@@ -162,6 +162,16 @@ buildings_types_lookup = {
     "clinic": 660,
     "mobile_money_agent": -3,
     "recycling": -3,
-    "school": 610
-
+    "school": 610,
+    "house": 0,
+    "construction": -3,
+    "detached": 0,
+    "hotel": 511,
+    "none": 0,
+    "doctors": 660,
+    "driving_school": -4,
+    "atm": -4,
+    "roof": -4,
+    "kindergarten": 610,
+    "sacco": 320,
 }
