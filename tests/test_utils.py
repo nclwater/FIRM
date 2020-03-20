@@ -1,6 +1,7 @@
 import utils
 import unittest
 
+osm_file = 'tests/bwaise/bwaise.osm'
 
 class TestUtils(unittest.TestCase):
 
@@ -11,10 +12,10 @@ class TestUtils(unittest.TestCase):
         utils.convert_terrain('tests/bwaise/terrain.asc', 'tests/bwaise/terrain.txt')
 
     def test_convert_roads(self):
-        utils.convert_roads('tests/bwaise/bwaise.osm', 'tests/bwaise/roads.txt')
+        utils.convert_roads(osm_file, 'tests/bwaise/roads.txt')
 
     def test_convert_buildings(self):
-        utils.convert_buildings('tests/bwaise/bwaise.osm',
+        utils.convert_buildings(osm_file,
                         'tests/bwaise/roads.txt', 'tests/bwaise/preprocessed-buildings.txt')
 
 
