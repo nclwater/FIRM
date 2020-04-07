@@ -2,17 +2,21 @@ import pprint
 import ast
 import re
 import xml.etree.ElementTree as ET
-import numpy as np
-import ogr
-import osr
-from scipy.spatial.distance import cdist
-from scipy.spatial import cKDTree
+try:
+    import numpy as np
+    import ogr
+    import osr
+    from scipy.spatial.distance import cdist
+    from scipy.spatial import cKDTree
 
-src = osr.SpatialReference()
-src.ImportFromEPSG(4326)
-dest = osr.SpatialReference()
-dest.ImportFromEPSG(21096)
-default_transform = osr.CoordinateTransformation(src, dest)
+    src = osr.SpatialReference()
+    src.ImportFromEPSG(4326)
+    dest = osr.SpatialReference()
+    dest.ImportFromEPSG(21096)
+    default_transform = osr.CoordinateTransformation(src, dest)
+
+except ImportError:
+    pass
 
 def create_netlogo_string(sequence: list, **kwargs):
     """
