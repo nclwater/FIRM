@@ -1,4 +1,4 @@
-__includes ["model.nls" "pathfindshow.nls" "pathfind.nls" "simple-hydro.nls" "agent.nls"]
+__includes ["src/model.nls" "src/pathfindshow.nls" "src/pathfind.nls" "src/simple-hydro.nls" "src/agent.nls"]
 
 extensions [table profiler line array2 pq math]
 
@@ -109,7 +109,7 @@ INPUTBOX
 125
 70
 scenario
-tests/towyn
+toytown/tests/towyn
 1
 0
 String
@@ -769,7 +769,7 @@ NetLogo 4.0.2
       <value value="&quot;7:45&quot;"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="scenario">
-      <value value="&quot;tests/towyn&quot;"/>
+      <value value="&quot;toytown/tests/towyn&quot;"/>
     </enumeratedValueSet>
     <enumeratedValueSet variable="heuristic-factor">
       <value value="1.25"/>

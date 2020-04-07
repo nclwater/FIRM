@@ -1,37 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import run
-import scenario
+from toytown import run, scenario
 import os
-from utils import read_netlogo_file
+from toytown.utils import read_netlogo_file
 
-agents = read_netlogo_file('tests/bwaise/agents.txt')
+agents = read_netlogo_file('toytown/tests/bwaise/agents.txt')
 
 defences_to_breach = ["a"]
 
-defences = read_netlogo_file('tests/bwaise/defences.txt')
+defences = read_netlogo_file('toytown/tests/bwaise/defences.txt')
 
-roads = read_netlogo_file('tests/bwaise/roads.txt')
+roads = read_netlogo_file('toytown/tests/bwaise/roads.txt')
 
-codes = read_netlogo_file('tests/bwaise/codes.txt')
+codes = read_netlogo_file('toytown/tests/bwaise/codes.txt')
 
-terrain = read_netlogo_file('tests/bwaise/terrain.txt')
+terrain = read_netlogo_file('toytown/tests/bwaise/terrain.txt')
 
-buildings = read_netlogo_file('tests/bwaise/preprocessed-buildings.txt')
+buildings = read_netlogo_file('toytown/tests/bwaise/preprocessed-buildings.txt')
 
-streams = read_netlogo_file('tests/bwaise/streams.txt')
+streams = read_netlogo_file('toytown/tests/bwaise/streams.txt')
 
 
 warning_times = ["07:50:00", "07:55:00", "08:00:00"]
 
 sea_levels = [4]
 
-if not os.path.exists('tests/outputs'):
-    os.mkdir('tests/outputs')
+if not os.path.exists('toytown/tests/outputs'):
+    os.mkdir('toytown/tests/outputs')
 
-model_path = 'tests/outputs/bwaise'
-inputs_path = 'tests/bwaise'
+model_path = 'toytown/tests/outputs/bwaise'
+inputs_path = 'toytown/tests/bwaise'
 
 scenarios = []
 
@@ -41,7 +40,7 @@ for defence in defences_to_breach:
         for sea_level in sea_levels:
             scenarios.append(
                 scenario.Scenario(
-                    path='tests/outputs/bwaise-defence-{}-evacuation-{}-sea-{}'.format(
+                    path='toytown/tests/outputs/bwaise-defence-{}-evacuation-{}-sea-{}'.format(
                         defence, warning_time.replace(':', ''), sea_level),
                     width=220,
                     height=143,

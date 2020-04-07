@@ -1,37 +1,36 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import run
-import scenario
+from toytown import run, scenario
 import os
-from utils import read_netlogo_file
+from toytown.utils import read_netlogo_file
 
-agents = read_netlogo_file('tests/kibera/agents.txt')
+agents = read_netlogo_file('toytown/tests/kibera/agents.txt')
 
 defences_to_breach = ["a"]
 
-defences = read_netlogo_file('tests/kibera/defences.txt')
+defences = read_netlogo_file('toytown/tests/kibera/defences.txt')
 
-roads = read_netlogo_file('tests/kibera/roads.txt')
+roads = read_netlogo_file('toytown/tests/kibera/roads.txt')
 
-codes = read_netlogo_file('tests/kibera/codes.txt')
+codes = read_netlogo_file('toytown/tests/kibera/codes.txt')
 
-terrain = read_netlogo_file('tests/kibera/terrain.txt')
+terrain = read_netlogo_file('toytown/tests/kibera/terrain.txt')
 
-buildings = read_netlogo_file('tests/kibera/preprocessed-buildings.txt')
+buildings = read_netlogo_file('toytown/tests/kibera/preprocessed-buildings.txt')
 
-streams = read_netlogo_file('tests/kibera/streams.txt')
+streams = read_netlogo_file('toytown/tests/kibera/streams.txt')
 
 
 warning_times = ["07:50:00", "07:55:00", "08:00:00"]
 
 sea_levels = [4]
 
-if not os.path.exists('tests/outputs'):
-    os.mkdir('tests/outputs')
+if not os.path.exists('toytown/tests/outputs'):
+    os.mkdir('toytown/tests/outputs')
 
-model_path = 'tests/outputs/kibera'
-inputs_path = 'tests/kibera'
+model_path = 'toytown/tests/outputs/kibera'
+inputs_path = 'toytown/tests/kibera'
 
 scenarios = []
 
@@ -41,7 +40,7 @@ for defence in defences_to_breach:
         for sea_level in sea_levels:
             scenarios.append(
                 scenario.Scenario(
-                    path='tests/outputs/kibera-defence-{}-evacuation-{}-sea-{}'.format(defence, warning_time.replace(':', ''), sea_level),
+                    path='toytown/tests/outputs/kibera-defence-{}-evacuation-{}-sea-{}'.format(defence, warning_time.replace(':', ''), sea_level),
                     width=297,
                     height=104,
                     start_time='7:45',

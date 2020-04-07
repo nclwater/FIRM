@@ -1,4 +1,4 @@
-from utils import create_netlogo_string
+from .utils import create_netlogo_string
 import os
 
 

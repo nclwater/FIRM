@@ -13,6 +13,7 @@ https://www.youtube.com/watch?v=o0EOlc5n9O8
 ## Running from NetLogo GUI
 
 - Open model.nlogo
+
 - Choose the number of vehicles, sea level and starting time (and scenario name if appropriate) for the simulation.
 
 - Click ‘Setup’ to load in the data.
@@ -26,9 +27,9 @@ https://www.youtube.com/watch?v=o0EOlc5n9O8
 ## Running from Python
 Set environment variable NETLOGO with the location of NetLogo.jar. Then:
 ```
-python tests/test_towyn.py
-python tests/test_kibera.py
-python tests/test_bwaise.py
+python -m toytown.tests.test_towyn
+python -m toytown.tests.test_kibera
+python -m toytown.tests.test_bwaise
 ```
 ## Acknowledgements
 This model was originally developed at Newcastle University by Roger Peppe and Richard Dawson. The research was funded by the Environment Agency (Reliability in Flood Incident Management Planning – SC060063) as part of the Joint DEFRA/EA Flood and Coastal Erosion Risk Management R&D Programme. The overall programme was led by Halcrow but also in collaboration with JBA Consulting, Middlesex University and Bristol University.
