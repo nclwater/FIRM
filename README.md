@@ -1,4 +1,4 @@
-# An Agent-Based Model for Flood Incident Management  
+# Flood Infrastructure Resilience Model (FIRM): An Agent-Based Model for Flood Incident Management  
 [![An agent based model of flood evacuation](
 https://img.youtube.com/vi/o0EOlc5n9O8/0.jpg)](
 https://www.youtube.com/watch?v=o0EOlc5n9O8 
